@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams } from "react-router-dom";
 
-import {    
-    Box,
-    Paper,
-    Button,
-    Typography,
-    Divider,
-    Drawer
+import {
+  Box,
+  Paper,
+  Button,
+  Typography,
+  Divider,
+  Drawer
 } from '@mui/material';
 
 import { useRecoilValue } from "recoil";
@@ -20,7 +20,7 @@ export default function ProductPage() {
 
   const [openDrawer, setOpenDrawer] = React.useState(false);
 
-  function toggleDrawer(newOpen : boolean){
+  function toggleDrawer(newOpen: boolean) {
 
     setOpenDrawer(newOpen);
 
@@ -48,26 +48,23 @@ export default function ProductPage() {
   return (
     <>
       <Header />
-      <Box sx={{marginBottom: "55px"}}>
-          <img src={folder_image_url + currentProduct.images} style={{width: "100%"}}/>
-          <Box sx={{padding: "10px"}}>
-            <Typography variant="h5" sx={{marginBottom: "10px"}}>{currentProduct?.name}</Typography>
-            <Typography variant="h6">{currencyFormat.format(currentProduct.price)}</Typography>
-          </Box>
-          <Divider />
-          <Box sx={{padding: "10px"}}>
-            <Typography variant='body1' sx={{textAlign: "justify"}}>
-              {currentProduct?.description}
-            </Typography>
-          </Box>
+      <Box sx={{ marginBottom: "55px" }}>
+        <img src={folder_image_url + currentProduct.images} style={{ width: "100%" }} />
+        <Box sx={{ padding: "10px" }}>
+          <Typography variant="h5" sx={{ marginBottom: "10px" }}>{currentProduct?.name}</Typography>
+          <Typography variant="h6">{currencyFormat.format(currentProduct.price)}</Typography>
+        </Box>
+        <Divider />
+        <Box sx={{ padding: "10px" }}>
+          <Typography variant='body1' sx={{ textAlign: "justify" }}>
+            {currentProduct?.description}
+          </Typography>
+        </Box>
       </Box>
 
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <Box sx={{ display: "flex" }}>
-          {/* <Button onClick={()=>{toggleDrawer(true)}} variant="outlined" size="large" color="success" sx={{margin: "5px", width: "100%"}}>
-            Thêm vào giỏ
-          </Button> */}
-          <Button onClick={()=>{toggleDrawer(true)}} variant="contained" size="large" color="success" sx={{margin: "5px", width: "100%"}}>
+          <Button onClick={() => { toggleDrawer(true) }} variant="contained" size="large" color="success" sx={{ margin: "5px", width: "100%" }}>
             Mua ngay
           </Button>
         </Box>
@@ -76,7 +73,7 @@ export default function ProductPage() {
       <Drawer
         anchor="bottom"
         open={openDrawer}
-        onClose={()=> toggleDrawer(false)}
+        onClose={() => toggleDrawer(false)}
       >
         <ProductPicker product={currentProduct} toggleDrawer={toggleDrawer} />
       </Drawer>

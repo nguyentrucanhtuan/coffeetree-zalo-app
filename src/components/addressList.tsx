@@ -1,16 +1,11 @@
 import * as React from 'react';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import {
   Box,
   Button,
   Divider,
   Drawer,
   FormControlLabel,
-  IconButton,
-  ListItemButton,
-  ListItemIcon,
   Paper,
   Radio,
   RadioGroup,
@@ -19,9 +14,8 @@ import {
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AddIcon from '@mui/icons-material/Add';
 import AddressPicker from './addressPicker';
-import { getStorage, getStorageInfo } from 'zmp-sdk';
-import { loadAddressList, saveAddressList } from '../service/localStorage';
-import { getAddressList, localAddressListState, addressListState, addressSelectState } from '../recoil-state/address-state';
+import { getStorage } from 'zmp-sdk';
+import { addressListState, addressSelectState } from '../recoil-state/address-state';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 export default function AddressList(props: any) {

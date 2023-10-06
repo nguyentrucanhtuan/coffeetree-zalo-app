@@ -4,33 +4,15 @@ import { useParams } from "react-router-dom";
 
 import {
     Box,
-    List,
-    ListItem,
     Paper,
     Typography,
-    Avatar,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
     Divider,
     Button
 } from '@mui/material';
 
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-
-import AppBottomNavigation from '../components/appBottomNavigation';
-import DeliveryInfo from '../components/deliveryInfo';
 import ProductCartList from '../components/productCartList';
-import PaymentMethod from '../components/paymentMethod';
-
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
-import MarkUnreadChatAltIcon from '@mui/icons-material/MarkUnreadChatAlt';
 
 export default function CheckoutSuccessPage() {
 
