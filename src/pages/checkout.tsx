@@ -1,15 +1,15 @@
 import * as React from 'react';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import { Button, Typography } from '@mui/material';
+import { Button, FormControlLabel, List, Radio, RadioGroup, Typography } from '@mui/material';
 
 import ProductCartList from '../components/productCartList';
-import PaymentMethod from '../components/paymentMethod';
 import DeliveryInfo from '../components/deliveryInfo';
 import { useRecoilValue } from 'recoil';
 import { cartState, cartTotalState } from '../recoil-state/cart-state';
 import { useNavigate } from "react-router";
 import { addressSelectState } from '../recoil-state/address-state';
+import { paymentMethodListState } from '../recoil-state/payment-state';
 
 export default function CheckoutPage() {
 
@@ -27,7 +27,15 @@ export default function CheckoutPage() {
     maximumFractionDigits: 0,
   });
 
-  //console.log(cartTotal);
+  const listPaymentMethod = useRecoilValue(paymentMethodListState);
+
+  const folder_image_url = "http://localhost:81/storage/";
+
+  const [paymentId, setPaymentId] = React.useState(listPaymentMethod[0].id);
+
+  const handleChangePayment = (event) => {
+    setPaymentId(event.target.value);
+  };
 
   const handleCheckOut = async () => {
 
@@ -58,8 +66,6 @@ export default function CheckoutPage() {
       )
     }
 
-    console.log('cart send Post', JSON.stringify(cart));
-
     const data = {
       fullname: addressSelect.fullname,
       phone: addressSelect.phone,
@@ -67,7 +73,8 @@ export default function CheckoutPage() {
       address: addressSelect.address,
       shipping_price: shippingFee,
       cart: JSON.stringify(cart),
-      note: 'ghi chú',
+      payment_id: paymentId,
+      note: 'ghi chú đơn hàng',
     };
 
     const response = await fetch(linkAPI, {
@@ -106,7 +113,31 @@ export default function CheckoutPage() {
             Phương thức thanh toán
           </Typography>
 
-          <PaymentMethod />
+          <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            <RadioGroup
+              defaultValue={listPaymentMethod[0].id}
+              name="payment-raido-group"
+              onChange={handleChangePayment}
+            >
+              {listPaymentMethod.map((payment, index) => {
+                return (
+                  <Box key={index} sx={{ display: "flex", justifyContent: "space-between", paddingTop: "10px", paddingBottom: "10px" }}>
+                    <Box sx={{ display: "flex" }}>
+                      <Box sx={{ paddingLeft: "10px" }}>
+                        <img src={folder_image_url + payment.image} width="40" height="40" />
+                      </Box>
+                      <Box sx={{ paddingTop: "10px", paddingLeft: "15px" }}>
+                        <Typography variant='subtitle2'>{payment.name} </Typography>
+                      </Box>
+                    </Box>
+                    <Box sx={{ paddingRight: "10px" }}  >
+                      <FormControlLabel value={payment.id} control={<Radio />} label="" sx={{ paddingRight: "0px" }} />
+                    </Box>
+                  </Box>
+                )
+              })}
+            </RadioGroup>
+          </List>
         </Box>
 
         <Divider style={{ borderWidth: "4px" }} />
