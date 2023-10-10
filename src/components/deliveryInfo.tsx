@@ -6,7 +6,6 @@ import { Typography, Button, Drawer } from '@mui/material';
 
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
-import AddressPicker from './addressPicker';
 import AddressList from './addressList';
 import { useRecoilValue } from 'recoil';
 import { addressSelectState } from '../recoil-state/address-state';

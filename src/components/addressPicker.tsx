@@ -6,11 +6,6 @@ import {
     Typography,
     Grid,
     Button,
-    FormControl,
-    FormLabel,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
     Paper,
     Switch,
     Divider,
@@ -20,10 +15,9 @@ import {
     DialogContentText,
     DialogActions
 } from "@mui/material";
-import { setStorage, getStorage } from "zmp-sdk";
-import { saveAddressList } from "../service/localStorage";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { addAddressState, addressListState, localAddressListState, saveAddressListToLocal } from "../recoil-state/address-state";
+import { setStorage } from "zmp-sdk";
+import { useRecoilState } from "recoil";
+import { addressListState } from "../recoil-state/address-state";
 
 export default function AddressPicker(props: any) {
 

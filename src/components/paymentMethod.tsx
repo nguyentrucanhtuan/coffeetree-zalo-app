@@ -1,17 +1,10 @@
 'use client'
-import React, { useState } from 'react';
+import React from 'react';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Radio from '@mui/material/Radio';
-import Avatar from '@mui/material/Avatar';
 import { useRecoilValue } from 'recoil';
 import { paymentMethodListState } from '../recoil-state/payment-state';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Divider, FormControlLabel, RadioGroup, Typography } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Box, FormControlLabel, RadioGroup, Typography } from '@mui/material';
 
 
 export default function paymentMethod() {
