@@ -48,16 +48,6 @@ export default function AddressPicker(props: any) {
         }
     }
 
-    //console.log(props.addressEditId);
-
-    // const addressDataInit = {
-    //     default: false,
-    //     fullname: "",
-    //     phone: "",
-    //     address: "",
-    //     typeAddress: ""
-    // }
-
     const [addressInfo, setAddressInfo] = React.useState(addressDataInit);
 
     const handleAddAddress = async (address: any) => {

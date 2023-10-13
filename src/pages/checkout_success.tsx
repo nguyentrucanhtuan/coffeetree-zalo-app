@@ -99,8 +99,12 @@ export default function CheckoutSuccessPage() {
                         <Box sx={{ paddingTop: "10px", paddingLeft: "15px" }}>
                             <Typography variant='subtitle2'>Thanh toán chuyển khoản </Typography>
                         </Box>
+
                     </Box>
 
+                </Box>
+                <Box>
+                    <Typography variant='body1'>Nội dung chuyển khoản Nội dung chuyển khoản Nội dung chuyển khoản Nội dung chuyển khoản</Typography>
                 </Box>
             </Box>
 
@@ -110,8 +114,6 @@ export default function CheckoutSuccessPage() {
                 <Box sx={{ display: "flex" }}>
                     <Box sx={{ paddingLeft: "10px" }}>
                         <img width="64" height="64" src="https://img.icons8.com/cute-clipart/64/chat.png" alt="chat" />
-
-
                     </Box>
                     <Box sx={{ paddingTop: "10px", paddingLeft: "15px", paddingRight: "10px" }}>
                         <Button variant="outlined" fullWidth>Chat với hỗ trợ</Button>
@@ -121,7 +123,7 @@ export default function CheckoutSuccessPage() {
             </Box>
 
             <Box sx={{ padding: "15px" }}>
-                <Button startIcon={<HomeIcon />} onClick = {() => navigate('/')} variant="outlined" fullWidth>Trở về trang chủ</Button>
+                <Button startIcon={<HomeIcon />} onClick={() => navigate('/')} variant="outlined" fullWidth>Trở về trang chủ</Button>
             </Box>
 
         </Box>
