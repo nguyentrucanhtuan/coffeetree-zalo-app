@@ -1,13 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-
 import { Box, Paper, Button, Typography, Divider, Drawer } from "@mui/material";
-
 import { useRecoilValue } from "recoil";
 import { allProductListState } from "../recoil-state/product-state";
-
 import ProductPicker from "../components/productPicker";
 import { Header } from "zmp-ui";
+import { folder_image_url } from "../recoil-state/setting";
 
 export default function ProductPage() {
   const [openDrawer, setOpenDrawer] = React.useState(false);
@@ -20,10 +18,8 @@ export default function ProductPage() {
 
   const allProductList = useRecoilValue(allProductListState);
 
-  const folder_image_url = "http://order.coffeetree.vn/storage/";
-
   const currentProduct = allProductList.find(
-    (item) => item.id === Number(productId),
+    (item) => Number(item.id) === Number(productId),
   );
 
   const currencyFormat = new Intl.NumberFormat("de-DE", {

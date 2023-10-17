@@ -17,6 +17,8 @@ import { cartState, cartTotalState } from "../recoil-state/cart-state";
 import { useNavigate } from "react-router";
 import { addressSelectState } from "../recoil-state/address-state";
 import { paymentMethodListState } from "../recoil-state/payment-state";
+import { folder_image_url, APILink } from "../recoil-state/setting";
+
 
 export default function CheckoutPage() {
   const cartList = useRecoilValue(cartState);
@@ -35,8 +37,6 @@ export default function CheckoutPage() {
 
   const listPaymentMethod = useRecoilValue(paymentMethodListState);
 
-  const folder_image_url = "http://localhost:81/storage/";
-
   const [paymentId, setPaymentId] = React.useState(listPaymentMethod[0].id);
 
   const handleChangePayment = (event) => {
@@ -44,7 +44,7 @@ export default function CheckoutPage() {
   };
 
   const handleCheckOut = async () => {
-    const linkAPI = "http://localhost:81/api/add_customer_order";
+    const APILinkAddOrder = APILink + "/add_customer_order";
 
     const cart: any = [];
 
@@ -77,7 +77,7 @@ export default function CheckoutPage() {
       note: "ghi chú đơn hàng",
     };
 
-    const response = await fetch(linkAPI, {
+    const response = await fetch(APILinkAddOrder, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
