@@ -11,9 +11,10 @@ import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Box } from '@mui/material';
 
+import { folder_image_url } from "../recoil-state/setting";
+
 export default function Slider(props : any) {
 
-  const folder_image_url = "http://localhost:81/storage/";
   return (
     <Box sx={{padding: "10px"}}>
       <Swiper pagination={true} modules={[Pagination]} className="mySwiper">

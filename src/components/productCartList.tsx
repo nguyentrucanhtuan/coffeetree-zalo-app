@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 
 import { useRecoilValue } from 'recoil';
 import { cartState } from '../recoil-state/cart-state';
+import { folder_image_url } from "../recoil-state/setting";
 
 export default function MediaControlCard() {
 
@@ -21,7 +22,6 @@ export default function MediaControlCard() {
 
     const cartList = useRecoilValue(cartState);
 
-    const folder_image_url = "http://localhost:81/storage/";
 
     return (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>

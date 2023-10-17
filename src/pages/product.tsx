@@ -31,7 +31,7 @@ export default function ProductPage() {
   const allProductList = useRecoilValue(allProductListState);
 
 
-  const folder_image_url = "http://localhost:81/storage/";
+  const folder_image_url = "http://order.coffeetree.vn/storage/";
 
   const currentProduct = allProductList.find(
 
@@ -49,10 +49,10 @@ export default function ProductPage() {
     <>
       <Header />
       <Box sx={{ marginBottom: "55px" }}>
-        <img src={folder_image_url + currentProduct.images} style={{ width: "100%" }} />
+        <img src={folder_image_url + currentProduct?.images} style={{ width: "100%" }} />
         <Box sx={{ padding: "10px" }}>
           <Typography variant="h5" sx={{ marginBottom: "10px" }}>{currentProduct?.name}</Typography>
-          <Typography variant="h6">{currencyFormat.format(currentProduct.price)}</Typography>
+          <Typography variant="h6">{currencyFormat.format(currentProduct?.price)}</Typography>
         </Box>
         <Divider />
         <Box sx={{ padding: "10px" }}>

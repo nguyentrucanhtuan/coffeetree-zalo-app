@@ -1,6 +1,7 @@
 import { selector } from "recoil";
+import { APILink } from "./setting";
 
-const linkPaymentMethodAPI = "http://localhost:81/api/payment_list";
+const linkPaymentMethodAPI = APILink + "/payment_list";
 
 export const paymentMethodListState = selector({
   key: 'paymentMethodList',

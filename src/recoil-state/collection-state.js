@@ -1,6 +1,7 @@
 import { selector } from "recoil";
+import { APILink } from "./setting";
 
-const linkCollectionApi = "http://localhost:81/api/collection_list";
+const linkCollectionApi = APILink + "/collection_list";
 
 export const allCollectionListState = selector({
   key: 'collectionList',

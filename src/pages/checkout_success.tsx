@@ -27,7 +27,7 @@ export default function CheckoutSuccessPage() {
         maximumFractionDigits: 0,
     });
 
-    const folder_image_url = "http://localhost:81/storage/";
+    const folder_image_url = "http://order.coffeetree.vn/storage/";
     const payment_image = "U8rG4scAzZ0dArokqWummod1ehy6Bj-metaY3JlZGl0LnBuZw==-.png"
 
     const navigate = useNavigate();

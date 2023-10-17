@@ -71,7 +71,7 @@ export default function productPicker(props: any) {
             return item.id == event.target.value;
         });
 
-        let toppingListNew = []
+        let toppingListNew = [];
 
         if (event.target.checked == true) {
 

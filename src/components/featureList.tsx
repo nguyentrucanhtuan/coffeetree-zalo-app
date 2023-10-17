@@ -3,11 +3,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Box, Typography } from '@mui/material';
 import { useNavigate } from "react-router";
+import { folder_image_url } from "../recoil-state/setting";
 
 function FeatureList(props: any) {
 
     const navigate = useNavigate();
-    const folder_image_url = "http://localhost:81/storage/";
 
     const currencyFormat = new Intl.NumberFormat('de-DE', {
         style: 'decimal',

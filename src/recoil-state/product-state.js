@@ -1,7 +1,7 @@
 import { selector, selectorFamily } from "recoil";
-//import a
+import { APILink } from "./setting";
 
-const linkProductAPI = "http://localhost:81/api/product_list";
+const linkProductAPI = APILink + "/product_list";
 
 export const allProductListState = selector({
     key: 'allProductList',

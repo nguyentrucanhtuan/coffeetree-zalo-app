@@ -31,9 +31,7 @@ const Index = () => {
     setValue(newValue);
 
     if (newValue == 'profile' || newValue == 'checkout') {
-      
-      if(!checkAccess)
-        toggelDrawerAccessPhone(true);
+      toggelDrawerAccessPhone(true);
     }
   }
 

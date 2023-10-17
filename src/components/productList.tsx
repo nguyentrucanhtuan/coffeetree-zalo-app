@@ -10,12 +10,12 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 
 import { useNavigate } from "react-router";
+import { folder_image_url } from "../recoil-state/setting";
 
 export default function ProductList(props: any) {
 
     const navigate = useNavigate();
     
-    const folder_image_url = "http://localhost:81/storage/";
 
     const currencyFormat = new Intl.NumberFormat('de-DE', {
                         style: 'decimal',
