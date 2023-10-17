@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, Box, Drawer, Typography } from "@mui/material";
 
 import {
@@ -17,7 +17,7 @@ import HomePage from "./home";
 import CollectionPage from "./collection";
 import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
-import { getPhoneNumber } from "zmp-sdk/apis";
+import { getPhoneNumber, getAccessToken } from "zmp-sdk/apis";
 
 const Index = () => {
   const [value, setValue] = React.useState("home");
@@ -38,22 +38,66 @@ const Index = () => {
     setOpenDrawerAccessPhone(newOpen);
   }
 
+
+  const [accessTokenState, setAccessTokenState] = useState("");
+  const [tokenState, setTokenState] = useState("");
+
   const handleOpenPhoneAccess = () => {
+
+    getAccessToken({
+      success: (accessToken) => {
+        // xử lý khi gọi api thành công
+        console.log('accessToken nè', accessToken);
+
+        setAccessTokenState(accessToken);
+      },
+      fail: (error) => {
+        // xử lý khi gọi api thất bại
+        console.log(error);
+      }
+    });
+
     getPhoneNumber({
       success: async (data) => {
         let { token } = data;
+
+        setTokenState(token);
 
         toggelDrawerAccessPhone(false);
 
         setCheckAccess(true);
 
-        console.log("data zalo", data);
+        console.log("data zalo token", token);
       },
       fail: (error) => {
         // Xử lý khi gọi api thất bại
         console.log(error);
       },
     });
+
+    const zaloData = {access_token: accessTokenState, code: tokenState};
+
+    fetch('https://order.coffeetree.vn/api/get_phone_number_by_zalo_token', {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify(zaloData)
+      
+    }).then((response) => {
+
+      console.log('response from coffeetree server', response);
+
+      return response.json();
+
+    }).then((data) => {
+
+      console.log('data server', data)
+
+    })
+
   };
 
   return (

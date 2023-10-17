@@ -9,6 +9,22 @@ import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import HomeIcon from "@mui/icons-material/Home";
 
 import ProductCartList from "../components/productCartList";
+import { openChat } from "zmp-sdk/apis";
+
+const zaloOAId = "1610121007405920472";
+
+const openChatScreen = async () => {
+  try {
+    await openChat({
+      type: "oa",
+      id: zaloOAId,
+      message: "Xin Chào, Tôi muốn hỏi về đơn hàng",
+    });
+  } catch (error) {
+    // xử lý khi gọi api thất bại
+    console.log(error);
+  }
+};
 
 export default function CheckoutSuccessPage() {
   let { orderId } = useParams();
@@ -185,7 +201,7 @@ export default function CheckoutSuccessPage() {
               paddingRight: "10px",
             }}
           >
-            <Button variant="outlined" fullWidth>
+            <Button variant="outlined" fullWidth onClick={() => openChatScreen()}>
               Chat với hỗ trợ
             </Button>
             <Typography sx={{ marginTop: "5px" }} variant="body1">

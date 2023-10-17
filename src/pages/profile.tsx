@@ -30,7 +30,7 @@ const openChatScreen = async () => {
     await openChat({
       type: "oa",
       id: zaloOAId,
-      message: "Xin Chào",
+      message: "Xin Chào, tôi muốn hỏi",
     });
   } catch (error) {
     // xử lý khi gọi api thất bại
