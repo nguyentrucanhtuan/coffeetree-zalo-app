@@ -13,24 +13,36 @@ import CheckoutSuccessPage from "../pages/checkout_success";
 const MyApp = () => {
   return (
     <RecoilRoot>
-        <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<div>Loading...</div>}>
         <App>
           <SnackbarProvider>
             <ZMPRouter>
               <AnimationRoutes>
                 <Route path="/" element={<Index />}></Route>
                 <Route path="/collection" element={<CollectionPage />}></Route>
-                <Route path="/collection/:collectionId" element={<CollectionPage />}></Route>
+                <Route
+                  path="/collection/:collectionId"
+                  element={<CollectionPage />}
+                ></Route>
                 <Route path="/checkout" element={<CheckoutPage />}></Route>
-                <Route path="/checkout_success" element={<CheckoutSuccessPage />}></Route>
-                <Route path="/checkout_success/:orderId" element={<CheckoutSuccessPage />}></Route>
+                <Route
+                  path="/checkout_success"
+                  element={<CheckoutSuccessPage />}
+                ></Route>
+                <Route
+                  path="/checkout_success/:orderId"
+                  element={<CheckoutSuccessPage />}
+                ></Route>
                 <Route path="/profile" element={<ProfilePage />}></Route>
-                <Route path="/product/:productId" element={<ProductPage />}></Route>
+                <Route
+                  path="/product/:productId"
+                  element={<ProductPage />}
+                ></Route>
               </AnimationRoutes>
             </ZMPRouter>
           </SnackbarProvider>
         </App>
-        </React.Suspense>
+      </React.Suspense>
     </RecoilRoot>
   );
 };

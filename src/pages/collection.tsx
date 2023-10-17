@@ -8,7 +8,7 @@ import { collectionPublicListState } from "../recoil-state/collection-state";
 import { productsByCollectionState } from "../recoil-state/product-state";
 
 import { useParams } from "react-router";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { Header } from "zmp-ui";
 
 export default function CollectionPage() {
@@ -28,7 +28,7 @@ export default function CollectionPage() {
 
   const collectionList = useRecoilValue(collectionPublicListState);
   const productListByCollection = useRecoilValue(
-    productsByCollectionState(curentCategoryId)
+    productsByCollectionState(curentCategoryId),
   );
 
   const location = useLocation();

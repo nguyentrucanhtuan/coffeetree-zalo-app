@@ -2,19 +2,15 @@ import { selector } from "recoil";
 import { allProductListState } from "./product-state";
 
 export const bannerListState = selector({
-    
-    key: 'bannerList',
+  key: "bannerList",
 
-    get: ({ get }) => {
+  get: ({ get }) => {
+    const list = get(allProductListState);
 
-        const list = get(allProductListState);
-        
-        const result = list.filter(function(item){
+    const result = list.filter(function (item) {
+      return item.collection_code == "BANNER";
+    });
 
-            return item.collection_code == "BANNER";
-
-        });
-
-        return result;
-    }
+    return result;
+  },
 });
