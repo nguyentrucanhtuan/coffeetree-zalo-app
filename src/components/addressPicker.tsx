@@ -40,7 +40,9 @@ export default function AddressPicker(props: any) {
         : "",
       typeAddress: "",
     };
+
     console.log("props.addressEditId", props.addressEditId);
+
   } else {
     addressDataInit = {
       default: false,
@@ -54,8 +56,14 @@ export default function AddressPicker(props: any) {
   const [addressInfo, setAddressInfo] = React.useState(addressDataInit);
 
   const handleAddAddress = async (address: any) => {
+
     if (props.addressEditId == null) {
-      let addressListData: any = [...addressList];
+
+      let addressListData: any = []
+
+      if(addressList != null){
+         addressListData = [...addressList];
+      }
 
       addressListData.push(address);
 

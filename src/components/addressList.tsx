@@ -95,7 +95,7 @@ export default function AddressList(props: any) {
             name="radio-buttons-group"
             onChange={handleRadioChange}
           >
-            {addressList.length > 0 &&
+            {addressList?.length > 0 &&
               addressList.map((address: any, index) => (
                 <Box
                   key={index}
@@ -142,7 +142,7 @@ export default function AddressList(props: any) {
 
           <Divider style={{ borderWidth: "4px" }} />
 
-          {addressList.length < 3 && (
+          {(addressList?.length < 3 || addressList == null) && (
             <Box
               sx={{
                 display: "flex",
