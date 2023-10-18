@@ -23,27 +23,26 @@ import { userInfoState } from "../recoil-state/userInfo-state";
 
 
 const Index = () => {
+
   const [value, setValue] = React.useState("home");
 
-  const [openDrawerAccessPhone, setOpenDrawerAccessPhone] =
-    React.useState(false);
+  const [openDrawerAccessPhone, setOpenDrawerAccessPhone] = React.useState(false);
 
   function toggelDrawerAccessPhone(newOpen: boolean) {
     setOpenDrawerAccessPhone(newOpen);
   }
 
+  const [userInfoData, setUserInfoData] = useRecoilState(userInfoState);
+
   const [accessTokenState, setAccessTokenState] = useState("");
   const [tokenState, setTokenState] = useState("");
 
-  const [userInfoData, setUserInfoData] = useRecoilState(userInfoState);
-
   const handleOpenPhoneAccess = () => {
 
+    //Lấy accessToken Zalo
     getAccessToken({
       success: (accessToken) => {
         // xử lý khi gọi api thành công
-        console.log('accessToken nè', accessToken);
-
         setAccessTokenState(accessToken);
       },
       fail: (error) => {
@@ -59,8 +58,6 @@ const Index = () => {
         setTokenState(token);
 
         toggelDrawerAccessPhone(false);
-
-        console.log("data zalo token", token);
       },
       fail: (error) => {
         // Xử lý khi gọi api thất bại
@@ -68,7 +65,7 @@ const Index = () => {
       },
     });
 
-    const zaloData = { access_token: accessTokenState, code: tokenState };
+    const zaloToken = { access_token: accessTokenState, code: tokenState };
 
     fetch('https://order.coffeetree.vn/api/get_phone_number_by_zalo_token', {
       method: "POST",
@@ -77,7 +74,7 @@ const Index = () => {
         "Content-Type": "application/json",
       },
 
-      body: JSON.stringify(zaloData)
+      body: JSON.stringify(zaloToken)
 
     }).then((response) => {
 
@@ -161,6 +158,7 @@ const Index = () => {
   //   setCheckAccess(true);
   // }
 
+  
   const handleBottomNavigation = (event: any, newValue: any) => {
 
     setValue(newValue);

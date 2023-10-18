@@ -21,6 +21,7 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 import AddressList from "../components/addressList";
 
+import { useNavigate } from "react-router";
 import { openChat, followOA } from "zmp-sdk/apis";
 
 const zaloOAId = "1610121007405920472";
@@ -51,6 +52,8 @@ const followZaloOA = async () => {
 
 export default function ProfilePage() {
   const [openDrawer, setOpenDrawer] = React.useState(false);
+
+  const navigate = useNavigate();
 
   function toggelDrawerAddress(newOpen: boolean) {
     setOpenDrawer(newOpen);
@@ -91,35 +94,36 @@ export default function ProfilePage() {
           <nav aria-label="main mailbox folders">
             <List>
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton onClick={() => navigate('/editInfo')}>
                   <ListItemIcon>
                     <ContactPhoneIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Thông tin tài khoản" />
+                  <ListItemText primary="Chỉnh sửa thông tin"  />
                   <NavigateNextIcon />
                 </ListItemButton>
               </ListItem>
               <Divider />
 
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton onClick={() => navigate('/orderList')} >
                   <ListItemIcon>
                     <AccessTimeIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Lịch sử đơn hàng" />
+                  <ListItemText primary="Đơn hàng" />
+                  <Typography variant="caption">Xem tất cả</Typography>
                   <NavigateNextIcon />
                 </ListItemButton>
               </ListItem>
+
               <Divider />
 
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton onClick={() => toggelDrawerAddress(true)}>
                   <ListItemIcon>
                     <HelpOutlineIcon />
                   </ListItemIcon>
                   <ListItemText
                     primary="Sổ địa chỉ"
-                    onClick={() => toggelDrawerAddress(true)}
                   />
                   <NavigateNextIcon />
                 </ListItemButton>
@@ -127,13 +131,12 @@ export default function ProfilePage() {
               <Divider />
 
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton onClick={() => openChatScreen()} >
                   <ListItemIcon>
                     <DraftsIcon />
                   </ListItemIcon>
                   <ListItemText
                     primary="Liên hệ và góp ý"
-                    onClick={() => openChatScreen()}
                   />
                   <NavigateNextIcon />
                 </ListItemButton>

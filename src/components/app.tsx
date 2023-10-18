@@ -9,6 +9,8 @@ import CheckoutPage from "../pages/checkout";
 import ProfilePage from "../pages/profile";
 import ProductPage from "../pages/product";
 import CheckoutSuccessPage from "../pages/checkout_success";
+import EditInfoPage from "../pages/edit_info";
+import OrderListPage from "../pages/order_list";
 
 const MyApp = () => {
   return (
@@ -38,6 +40,8 @@ const MyApp = () => {
                   path="/product/:productId"
                   element={<ProductPage />}
                 ></Route>
+                <Route path="/editInfo" element={<EditInfoPage />}></Route>
+                <Route path="/orderList" element={<OrderListPage />}></Route>
               </AnimationRoutes>
             </ZMPRouter>
           </SnackbarProvider>

@@ -68,7 +68,7 @@ export default function productPicker(props: any) {
       return item.id == event.target.value;
     });
 
-    let toppingListNew = [];
+    let toppingListNew : any[] = [];
 
     if (event.target.checked == true) {
       toppingListNew = [...toppingList, addonProduct[0]];
