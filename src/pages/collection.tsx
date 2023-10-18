@@ -56,7 +56,7 @@ export default function CollectionPage() {
           {collectionList.map((collection) => (
             <Tab
               key={collection.id}
-              value={collection.id}
+              value={Number(collection.id)}
               label={collection.name}
             />
           ))}

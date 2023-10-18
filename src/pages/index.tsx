@@ -25,8 +25,6 @@ import { userInfoState } from "../recoil-state/userInfo-state";
 const Index = () => {
   const [value, setValue] = React.useState("home");
 
-  
-
   const [openDrawerAccessPhone, setOpenDrawerAccessPhone] =
     React.useState(false);
 
@@ -34,14 +32,10 @@ const Index = () => {
     setOpenDrawerAccessPhone(newOpen);
   }
 
-
   const [accessTokenState, setAccessTokenState] = useState("");
   const [tokenState, setTokenState] = useState("");
 
-
   const [userInfoData, setUserInfoData] = useRecoilState(userInfoState);
-
-
 
   const handleOpenPhoneAccess = () => {
 
@@ -160,18 +154,23 @@ const Index = () => {
 
   };
 
-  let checkAccessPhone = false;
+  // const [checkAccess, setCheckAccess] = useState(false);
 
-  if(userInfoData.phone != null || userInfoData.phone != ''){
-    checkAccessPhone = true;
-  }
+  // //let checkAccess = false;
+  // if (userInfoData.phone != null) {
+  //   setCheckAccess(true);
+  // }
 
   const handleBottomNavigation = (event: any, newValue: any) => {
+
     setValue(newValue);
 
-    if (newValue == "profile" || newValue == "checkout" && checkAccessPhone == false) {
+    if ((newValue == "profile" || newValue == "checkout")) {
       toggelDrawerAccessPhone(true);
     }
+
+
+    console.log('userInfoData', userInfoData);
   };
 
   return (
@@ -180,8 +179,8 @@ const Index = () => {
         <Box sx={{ marginBottom: "60px" }}>
           {value == "home" && <HomePage />}
           {value == "collection" && <CollectionPage />}
-          {value == "checkout" && checkAccessPhone && <CheckoutPage />}
-          {value == "profile" && checkAccessPhone && <ProfilePage />}
+          {value == "checkout"  && <CheckoutPage />}
+          {value == "profile" && <ProfilePage />}
         </Box>
 
         <Paper
