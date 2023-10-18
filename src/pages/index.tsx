@@ -17,19 +17,15 @@ import HomePage from "./home";
 import CollectionPage from "./collection";
 import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
-import { getPhoneNumber, getAccessToken } from "zmp-sdk/apis";
+import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo } from "zmp-sdk/apis";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "../recoil-state/userInfo-state";
+
 
 const Index = () => {
   const [value, setValue] = React.useState("home");
-  const [checkAccess, setCheckAccess] = React.useState(false);
 
-  const handleBottomNavigation = (event: any, newValue: any) => {
-    setValue(newValue);
-
-    if (newValue == "profile" || newValue == "checkout") {
-      toggelDrawerAccessPhone(true);
-    }
-  };
+  
 
   const [openDrawerAccessPhone, setOpenDrawerAccessPhone] =
     React.useState(false);
@@ -41,6 +37,11 @@ const Index = () => {
 
   const [accessTokenState, setAccessTokenState] = useState("");
   const [tokenState, setTokenState] = useState("");
+
+
+  const [userInfoData, setUserInfoData] = useRecoilState(userInfoState);
+
+
 
   const handleOpenPhoneAccess = () => {
 
@@ -65,8 +66,6 @@ const Index = () => {
 
         toggelDrawerAccessPhone(false);
 
-        setCheckAccess(true);
-
         console.log("data zalo token", token);
       },
       fail: (error) => {
@@ -75,7 +74,7 @@ const Index = () => {
       },
     });
 
-    const zaloData = {access_token: accessTokenState, code: tokenState};
+    const zaloData = { access_token: accessTokenState, code: tokenState };
 
     fetch('https://order.coffeetree.vn/api/get_phone_number_by_zalo_token', {
       method: "POST",
@@ -85,19 +84,94 @@ const Index = () => {
       },
 
       body: JSON.stringify(zaloData)
-      
+
     }).then((response) => {
 
       console.log('response from coffeetree server', response);
 
       return response.json();
 
-    }).then((data) => {
+    }).then((res) => {
 
-      console.log('data server', data)
+      console.log('data server', res)
+      console.log('so dien thoai', res.data.number);
 
+      setStorage({
+        data: {
+          zaloPhone: res.data.number,
+        },
+        success: (data) => {
+          //Lưu vào Recoil State
+          setUserInfoData({
+            id: null,
+            idByOA: null,
+            name: null,
+            avatar: null,
+            phone: res.data.number,
+          });
+
+          const { errorKeys } = data;
+          console.log("errorKeys Luu zalo phone", errorKeys);
+        },
+        fail: (error) => {
+          console.log(error);
+        },
+      });
+
+      getStorage({
+        keys: ["zaloPhone"],
+        success: (data) => {
+          //Lưu vào Recoil State
+          console.log('data.zaloPhone', data.zaloPhone);
+          setUserInfoData({
+            id: null,
+            idByOA: null,
+            name: null,
+            avatar: null,
+            phone: data.zaloPhone,
+          });
+        },
+        fail: (error) => {
+          console.log(error);
+        },
+      });
+
+      getUserInfo({
+        success: (data) => {
+          // xử lý khi gọi api thành công
+          const { userInfo } = data;
+
+          setUserInfoData({
+            ...userInfoData,
+            id: userInfo.id,
+            name: userInfo.name,
+            avatar: userInfo.avatar,
+            idByOA: userInfo.idByOA
+          })
+
+          console.log('userInfo', userInfo);
+        },
+        fail: (error) => {
+          // xử lý khi gọi api thất bại
+          console.log(error);
+        }
+      });
     })
 
+  };
+
+  let checkAccessPhone = false;
+
+  if(userInfoData.phone != null || userInfoData.phone != ''){
+    checkAccessPhone = true;
+  }
+
+  const handleBottomNavigation = (event: any, newValue: any) => {
+    setValue(newValue);
+
+    if (newValue == "profile" || newValue == "checkout" && checkAccessPhone == false) {
+      toggelDrawerAccessPhone(true);
+    }
   };
 
   return (
@@ -106,8 +180,8 @@ const Index = () => {
         <Box sx={{ marginBottom: "60px" }}>
           {value == "home" && <HomePage />}
           {value == "collection" && <CollectionPage />}
-          {value == "checkout" && checkAccess && <CheckoutPage />}
-          {value == "profile" && checkAccess && <ProfilePage />}
+          {value == "checkout" && checkAccessPhone && <CheckoutPage />}
+          {value == "profile" && checkAccessPhone && <ProfilePage />}
         </Box>
 
         <Paper
