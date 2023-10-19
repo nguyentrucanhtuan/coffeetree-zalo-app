@@ -19,7 +19,7 @@ import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
 import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo } from "zmp-sdk/apis";
 import { useRecoilState } from "recoil";
-import { userInfoState } from "../recoil-state/userInfo-state";
+import { checkPhoneAccess, userInfoState } from "../recoil-state/userInfo-state";
 
 
 const Index = () => {
@@ -39,134 +39,63 @@ const Index = () => {
 
   const handleOpenPhoneAccess = () => {
 
-    //Lấy accessToken Zalo
-    getAccessToken({
-      success: (accessToken) => {
-        // xử lý khi gọi api thành công
-        setAccessTokenState(accessToken);
+    //Gọi API để lấy dữ liệu user và Phone Number
+
+    //Lưu phone vào cache
+    setStorage({
+      data: {
+        zaloNumber: "84834234734_demo",
+      },
+      success: (data) => {
+        const { errorKeys } = data;
+        console.log("errorKeys", errorKeys);
       },
       fail: (error) => {
-        // xử lý khi gọi api thất bại
-        console.log(error);
-      }
-    });
-
-    getPhoneNumber({
-      success: async (data) => {
-        let { token } = data;
-
-        setTokenState(token);
-
-        toggelDrawerAccessPhone(false);
-      },
-      fail: (error) => {
-        // Xử lý khi gọi api thất bại
         console.log(error);
       },
     });
 
-    const zaloToken = { access_token: accessTokenState, code: tokenState };
-
-    fetch('https://order.coffeetree.vn/api/get_phone_number_by_zalo_token', {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
+    //Lưu thông tin vào cache
+    setStorage({
+      data: {
+        zaloId: '929283784747_demo',
+        zaloIdByOA: '929283784747882_demo',
+        zaloName: 'Anh Tuan demo',
+        zaloAvatar: 'https://i.pravatar.cc/300',
+        zaloIsSensitive: false
       },
-
-      body: JSON.stringify(zaloToken)
-
-    }).then((response) => {
-
-      console.log('response from coffeetree server', response);
-
-      return response.json();
-
-    }).then((res) => {
-
-      console.log('data server', res)
-      console.log('so dien thoai', res.data.number);
-
-      setStorage({
-        data: {
-          zaloPhone: res.data.number,
-        },
-        success: (data) => {
-          //Lưu vào Recoil State
-          setUserInfoData({
-            id: null,
-            idByOA: null,
-            name: null,
-            avatar: null,
-            phone: res.data.number,
-          });
-
-          const { errorKeys } = data;
-          console.log("errorKeys Luu zalo phone", errorKeys);
-        },
-        fail: (error) => {
-          console.log(error);
-        },
-      });
-
-      getStorage({
-        keys: ["zaloPhone"],
-        success: (data) => {
-          //Lưu vào Recoil State
-          console.log('data.zaloPhone', data.zaloPhone);
-          setUserInfoData({
-            id: null,
-            idByOA: null,
-            name: null,
-            avatar: null,
-            phone: data.zaloPhone,
-          });
-        },
-        fail: (error) => {
-          console.log(error);
-        },
-      });
-
-      getUserInfo({
-        success: (data) => {
-          // xử lý khi gọi api thành công
-          const { userInfo } = data;
-
-          setUserInfoData({
-            ...userInfoData,
-            id: userInfo.id,
-            name: userInfo.name,
-            avatar: userInfo.avatar,
-            idByOA: userInfo.idByOA
-          })
-
-          console.log('userInfo', userInfo);
-        },
-        fail: (error) => {
-          // xử lý khi gọi api thất bại
-          console.log(error);
-        }
-      });
+      success: (data) => {
+        const { errorKeys } = data;
+        console.log("errorKeys", errorKeys);
+      },
+      fail: (error) => {
+        console.log(error);
+      },
     })
+
+    //Lưu vào recoil
+    setUserInfoData({
+      id: "929283784747_demo",
+      idByOA: "929283784747882_demo",
+      name: "Anh Tuan demo",
+      avatar: "adfadfaf_demo.png",
+      phone: "84834234734_demo",
+    });
+
+    toggelDrawerAccessPhone(false);
 
   };
 
-  // const [checkAccess, setCheckAccess] = useState(false);
-
-  // //let checkAccess = false;
-  // if (userInfoData.phone != null) {
-  //   setCheckAccess(true);
-  // }
-
-  
   const handleBottomNavigation = (event: any, newValue: any) => {
 
-    setValue(newValue);
-
-    if ((newValue == "profile" || newValue == "checkout")) {
+    //setValue(newValue);
+    if ((newValue == "profile" || newValue == "checkout") && userInfoData.phone == "") {
       toggelDrawerAccessPhone(true);
     }
 
+    if (newValue == "home" || newValue == "collection" || userInfoData.phone != "") {
+      setValue(newValue);
+    }
 
     console.log('userInfoData', userInfoData);
   };
@@ -177,7 +106,7 @@ const Index = () => {
         <Box sx={{ marginBottom: "60px" }}>
           {value == "home" && <HomePage />}
           {value == "collection" && <CollectionPage />}
-          {value == "checkout"  && <CheckoutPage />}
+          {value == "checkout" && <CheckoutPage />}
           {value == "profile" && <ProfilePage />}
         </Box>
 

@@ -13,33 +13,33 @@ const EditInfoPage = () => {
 
     const [userInfoData, setUserInfoData] = useRecoilState(userInfoState);
 
+    //Lấy dữ liệu từ cache
     React.useEffect(() => {
         getStorage({
-            keys: ["zaloPhone"],
+            keys: ["zaloNumber", "zaloId", "zaloIdByOA", "zaloName", "zaloAvatar", "zaloIsSensitive"],
             success: (data) => {
                 //Lưu vào Recoil State
-                console.log('data.zaloPhone editInfo', data.zaloPhone);
-
                 setUserInfoData({
-                    id: null,
-                    idByOA: null,
-                    name: null,
-                    avatar: null,
-                    phone: data.zaloPhone,
+                    id: data.zaloId,
+                    idByOA: data.zaloIdByOA,
+                    name: data.zaloName,
+                    avatar: data.zaloAvatar,
+                    phone: data.zaloNumber,
                 });
             },
             fail: (error) => {
                 console.log(error);
             },
         });
-    },[])
+    },[]);
+
     return (
         <Box sx={{ background: "#fff" }}>
             <Header title="Chỉnh sửa thông tin" />
             <Box sx={{ marginTop: "43px", padding: "15px" }}>
-                <Avatar src="http://mui.com/static/images/avatar/1.jpg" style={{ width: "56px", height: "56px", marginBottom: "10px" }} />
+                <Avatar src={userInfoData.avatar} style={{ width: "56px", height: "56px", marginBottom: "10px" }} />
 
-                <TextField label="Họ và tên" placeholder="Nhập họ và tên" variant="outlined" fullWidth sx={{ mb: 2 }} />
+                <TextField label="Họ và tên" placeholder="Nhập họ và tên" variant="outlined" fullWidth sx={{ mb: 2 }} value={userInfoData.name}/>
                 <TextField label="Số điện thoại" variant="outlined" disabled fullWidth sx={{ mb: 2 }} value={userInfoData.phone} />
                 <TextField label="Email" placeholder="Nhập Email" variant="outlined" fullWidth sx={{ mb: 2 }} />
                 <FormControl>
