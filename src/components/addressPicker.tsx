@@ -29,15 +29,9 @@ export default function AddressPicker(props: any) {
   if (props.addressEditId != null) {
     addressDataInit = {
       default: false,
-      fullname: addressList[addressEditId]?.fullname
-        ? addressList[addressEditId].fullname
-        : "",
-      phone: addressList[addressEditId]?.phone
-        ? addressList[addressEditId].phone
-        : "",
-      address: addressList[addressEditId]?.address
-        ? addressList[addressEditId].address
-        : "",
+      fullname: addressList[addressEditId]?.fullname ? addressList[addressEditId].fullname : "",
+      phone: addressList[addressEditId]?.phone ? addressList[addressEditId].phone : "",
+      address: addressList[addressEditId]?.address ? addressList[addressEditId].address : "",
       typeAddress: "",
     };
 
@@ -52,6 +46,7 @@ export default function AddressPicker(props: any) {
       typeAddress: "",
     };
   }
+
 
   const [addressInfo, setAddressInfo] = React.useState(addressDataInit);
 

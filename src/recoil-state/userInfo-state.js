@@ -1,5 +1,5 @@
 import { atom, useRecoilValue } from "recoil";
-
+import { setStorage } from "zmp-sdk/apis";
 export const userInfoState = atom({
   key: "UserInfo",
   default: {
@@ -8,9 +8,10 @@ export const userInfoState = atom({
     name: "",
     avatar: "",
     phone: "",
+    email: "",
+    gender: ""
   },
 });
-
 
 export const checkPhoneAccess = () => {
 
@@ -21,6 +22,40 @@ export const checkPhoneAccess = () => {
   }
 
   return false;
+}
+
+export const saveZaloNumberToCache = (phoneNumber) => {
+  setStorage({
+    data: {
+      zaloNumber: phoneNumber,
+    },
+    success: (data) => {
+      const { errorKeys } = data;
+      console.log("errorKeys", errorKeys);
+    },
+    fail: (error) => {
+      console.log(error);
+    },
+  });
+}
+
+export const saveZaloInfoToCache = (id, idByOA, name, avatar, isSensitive) => {
+  setStorage({
+    data: {
+      zaloId: id,
+      zaloIdByOA: idByOA,
+      zaloName: name,
+      zaloAvatar: avatar,
+      zaloIsSensitive: isSensitive
+    },
+    success: (data) => {
+      const { errorKeys } = data;
+      console.log("errorKeys", errorKeys);
+    },
+    fail: (error) => {
+      console.log(error);
+    },
+  })
 }
 
 export const CallAndSaveZaloNumber = () => {
@@ -68,7 +103,7 @@ export const CallAndSaveZaloNumber = () => {
   //   console.log('data server', res)
   //   console.log('so dien thoai', res.data.number);
   //   const zaloNumber_demo = "84834234734_demo";
-    
+
   //   //Lưu vào cache
   //   setStorage({
   //     data: {

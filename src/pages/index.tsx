@@ -19,7 +19,7 @@ import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
 import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo } from "zmp-sdk/apis";
 import { useRecoilState } from "recoil";
-import { checkPhoneAccess, userInfoState } from "../recoil-state/userInfo-state";
+import { checkPhoneAccess, saveZaloInfoToCache, saveZaloNumberToCache, userInfoState } from "../recoil-state/userInfo-state";
 
 
 const Index = () => {
@@ -41,45 +41,19 @@ const Index = () => {
 
     //Gọi API để lấy dữ liệu user và Phone Number
 
-    //Lưu phone vào cache
-    setStorage({
-      data: {
-        zaloNumber: "84834234734_demo",
-      },
-      success: (data) => {
-        const { errorKeys } = data;
-        console.log("errorKeys", errorKeys);
-      },
-      fail: (error) => {
-        console.log(error);
-      },
-    });
-
-    //Lưu thông tin vào cache
-    setStorage({
-      data: {
-        zaloId: '929283784747_demo',
-        zaloIdByOA: '929283784747882_demo',
-        zaloName: 'Anh Tuan demo',
-        zaloAvatar: 'https://i.pravatar.cc/300',
-        zaloIsSensitive: false
-      },
-      success: (data) => {
-        const { errorKeys } = data;
-        console.log("errorKeys", errorKeys);
-      },
-      fail: (error) => {
-        console.log(error);
-      },
-    })
+    //Lưu data vào cache
+    saveZaloNumberToCache("84834234734_demo");
+    saveZaloInfoToCache('929283784747_demo','929283784747882_demo','Anh Tuan demo','https://i.pravatar.cc/300',false);
 
     //Lưu vào recoil
     setUserInfoData({
       id: "929283784747_demo",
       idByOA: "929283784747882_demo",
       name: "Anh Tuan demo",
-      avatar: "adfadfaf_demo.png",
+      avatar: "https://i.pravatar.cc/300",
       phone: "84834234734_demo",
+      email: "",
+      gender: ""
     });
 
     toggelDrawerAccessPhone(false);
@@ -97,7 +71,6 @@ const Index = () => {
       setValue(newValue);
     }
 
-    console.log('userInfoData', userInfoData);
   };
 
   return (
