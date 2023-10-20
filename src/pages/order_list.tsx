@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, Tabs, Tab } from "@mui/material";
 import { Header } from "zmp-ui";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "../recoil-state/userInfo-state";
 
 export default function OrderListPage() {
 
@@ -9,6 +11,23 @@ export default function OrderListPage() {
     const handleChange = (event: React.SyntheticEvent, value: string) => {
         setCurentTab(value);
     }
+
+    const userInfoData = useRecoilValue(userInfoState);
+
+    fetch('https://order.coffeetree.vn/api/order_list', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({zalo_number: userInfoData.phone})
+    }).then((response) => {
+        console.log('response from coffeetree server', response);
+        return response.json();
+    }).then((res) => {
+        console.log('data server', res)
+
+    })
+
 
     return (
         <Box sx={{ width: "100%" }}>

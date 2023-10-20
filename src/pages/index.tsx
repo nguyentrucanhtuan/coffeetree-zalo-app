@@ -42,8 +42,8 @@ const Index = () => {
     //Gọi API để lấy dữ liệu user và Phone Number
 
     //Lưu data vào cache
-    saveZaloNumberToCache("84834234734_demo");
-    saveZaloInfoToCache('929283784747_demo','929283784747882_demo','Anh Tuan demo','https://i.pravatar.cc/300',false);
+    saveZaloNumberToCache("84834234734");
+    saveZaloInfoToCache('929283784747_number','929283784747882_demo','Anh Tuan demo','https://i.pravatar.cc/300',false);
 
     //Lưu vào recoil
     setUserInfoData({
@@ -51,7 +51,7 @@ const Index = () => {
       idByOA: "929283784747882_demo",
       name: "Anh Tuan demo",
       avatar: "https://i.pravatar.cc/300",
-      phone: "84834234734_demo",
+      phone: "84834234734",
       email: "",
       gender: ""
     });

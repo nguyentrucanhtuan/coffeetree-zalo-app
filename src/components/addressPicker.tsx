@@ -46,8 +46,7 @@ export default function AddressPicker(props: any) {
       typeAddress: "",
     };
   }
-
-
+  
   const [addressInfo, setAddressInfo] = React.useState(addressDataInit);
 
   const handleAddAddress = async (address: any) => {
@@ -165,7 +164,6 @@ export default function AddressPicker(props: any) {
             <TextField
               fullWidth
               label="Họ và tên"
-              id="outlined-size-small"
               size="small"
               value={addressInfo.fullname}
               onChange={(event) => {
@@ -180,7 +178,6 @@ export default function AddressPicker(props: any) {
             <TextField
               fullWidth
               label="Số điện thoại"
-              id="outlined-size-small"
               size="small"
               type="number"
               value={addressInfo.phone}
@@ -196,7 +193,6 @@ export default function AddressPicker(props: any) {
             <TextField
               fullWidth
               label="Địa chỉ cụ thể (số nhà/đường/phường/xã/thành phố)"
-              id="outlined-size-small"
               size="small"
               multiline
               rows={2}
