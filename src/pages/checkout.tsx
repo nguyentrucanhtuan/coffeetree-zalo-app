@@ -145,7 +145,7 @@ export default function CheckoutPage() {
                       </Box>
                       <Box sx={{ paddingTop: "10px", paddingLeft: "15px" }}>
                         <Typography variant="subtitle2">
-                          {payment.name}{" "}
+                          {payment.name}
                         </Typography>
                       </Box>
                     </Box>

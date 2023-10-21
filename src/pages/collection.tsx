@@ -27,6 +27,7 @@ export default function CollectionPage() {
   };
 
   const collectionList = useRecoilValue(collectionPublicListState);
+  
   const productListByCollection = useRecoilValue(
     productsByCollectionState(curentCategoryId),
   );
