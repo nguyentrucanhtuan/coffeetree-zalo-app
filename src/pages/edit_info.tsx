@@ -12,7 +12,6 @@ const EditInfoPage = () => {
 
     const { openSnackbar, closeSnackbar } = useSnackbar();
     const timmerId = React.useRef();
-
     React.useEffect(
         () => () => {
             closeSnackbar();

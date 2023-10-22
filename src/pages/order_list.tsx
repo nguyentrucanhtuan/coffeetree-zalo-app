@@ -4,6 +4,8 @@ import { Header } from "zmp-ui";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "../recoil-state/userInfo-state";
 import { orderListByStatusState, orderListByZaloNumberState } from "../recoil-state/orderList-state";
+import { allProductListState, productById, productPublicListState } from "../recoil-state/product-state";
+import { folder_image_url } from "../recoil-state/setting";
 
 export default function OrderListPage() {
 
@@ -14,12 +16,25 @@ export default function OrderListPage() {
     }
 
     const userInfoData = useRecoilValue(userInfoState);
+    const listOrderAll = useRecoilValue(orderListByZaloNumberState(userInfoData.phone));
+    const listOrderByStatus = useRecoilValue(orderListByStatusState({ zaloNumber: userInfoData.phone, status: curentTab }));
 
-    const listOrder = useRecoilValue(orderListByZaloNumberState(userInfoData.phone));
+    let listOrder = [];
 
-    const listOrderByStatus = useRecoilValue(orderListByStatusState({zaloNumber: userInfoData.phone, status: curentTab}));
+    if (curentTab == "all") {
+        listOrder = listOrderAll;
+    } else {
+        listOrder = listOrderByStatus;
+    }
 
-    console.log('listOrderByStatus Complete', listOrderByStatus); 
+    const productAllList = useRecoilValue(allProductListState);
+
+    const currencyFormat = new Intl.NumberFormat("de-DE", {
+        style: "decimal",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    });
+
     return (
         <Box sx={{ width: "100%" }}>
             <Header title="Lịch sử đơn hàng" />
@@ -40,36 +55,47 @@ export default function OrderListPage() {
 
             <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
                 {listOrder.map((order: any) => {
+
+                    const orderCart = JSON.parse(order.cart);
+                    let quantity = 0;
+                    let total = 0;
+
+                    for (var i = 0; i < orderCart.length; i++) {
+                        quantity += Number(orderCart[i].quantity);
+                        total += Number(orderCart[i].price) * Number(orderCart[i].quantity);
+                    }
+
+                    const productFirst = productById(productAllList, Number(orderCart[0].product_id));
+
                     return (
-                    <Box key={order.id}>
-                        <Divider sx={{ borderWidth: "4px" }} />
-                        <Box>
-                            <Box sx={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                paddingTop: "5px",
-                                paddingLeft: "15px",
-                                paddingRight: "10px"
-                            }}>
-                                <Typography variant="subtitle2">A0{order.id}</Typography>
+                        <Box key={order.id}>
+                            <Divider sx={{ borderWidth: "4px" }} />
+                            <Box>
+                                <Box sx={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    paddingTop: "5px",
+                                    paddingLeft: "15px",
+                                    paddingRight: "10px"
+                                }}>
+                                    <Typography variant="subtitle2">A00{order.id}</Typography>
+                                    <Chip label={order.status} color="success" size="small" variant="outlined" />
+                                </Box>
 
-                                <Chip label={order.status} color="success" size="small" variant="outlined" />
-                            </Box>
-
-                            <Box sx={{ display: "flex", padding: "10px" }}>
-                                <img
-                                    src="https://order.coffeetree.vn/storage/product/6Ua5TRBmUF6nammxF1jWz6LMibSzBG-metaY2EtcGhlLWJhYy1zaXUucG5n-.png"
-                                    style={{ width: 80, height: 80 }}
-                                />
-                                <Box sx={{ padding: "8px" }}>
-                                    <Typography variant="subtitle2">Ca phe nguyen chhuyen</Typography>
-                                    <Typography variant="body2">11 Sarn pham adkjlalkfd</Typography>
-                                    <Typography variant="caption">Tong 100.0000</Typography>
+                                <Box sx={{ display: "flex", padding: "10px" }}>
+                                    <img
+                                        src={folder_image_url + productFirst[0].images}
+                                        style={{ width: 80, height: 80 }}
+                                    />
+                                    <Box sx={{ padding: "8px" }}>
+                                        <Typography variant="subtitle2">{productFirst[0].name}</Typography>
+                                        <Typography variant="body2">{quantity} sản phẩm</Typography>
+                                        <Typography variant="caption">Tổng {currencyFormat.format(total)}</Typography>
+                                    </Box>
                                 </Box>
                             </Box>
                         </Box>
-                    </Box>
                     )
                 })}
             </Box>

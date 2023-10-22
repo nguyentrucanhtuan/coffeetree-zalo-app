@@ -37,3 +37,19 @@ export const productsByCollectionState = selectorFamily({
       });
     },
 });
+
+export const productById = (productList, productId) => {
+  return productList.filter(function (item) {
+    return Number(item.id) == Number(productId);
+  });
+}
+
+// export const productByIdState = selectorFamily({
+//   key: "productById",
+//   get: (productId) => ({ get }) => {
+//     const allProducts = get(productPublicListState);
+//     return allProducts.filter(function (item) {
+//       return item.id == productId;
+//     });
+//   }
+// })

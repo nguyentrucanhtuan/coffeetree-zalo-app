@@ -15,6 +15,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { allProductListState } from "../recoil-state/product-state";
 import { addCart, cartState } from "../recoil-state/cart-state";
+import useSnackbar from "zmp-ui/useSnackbar";
 
 export default function productPicker(props: any) {
   const allProduct = useRecoilValue(allProductListState);
@@ -68,7 +69,7 @@ export default function productPicker(props: any) {
       return item.id == event.target.value;
     });
 
-    let toppingListNew : any[] = [];
+    let toppingListNew: any[] = [];
 
     if (event.target.checked == true) {
       toppingListNew = [...toppingList, addonProduct[0]];
@@ -108,15 +109,28 @@ export default function productPicker(props: any) {
 
   const [cartList, setCartList] = useRecoilState<any>(cartState);
 
+  const { openSnackbar } = useSnackbar();
+
   function handleAddToCart() {
+
     const product = {
       ...productAddCart,
       addTopping: toppingList,
       quantity: quantity,
     };
+
     const newCart = addCart(cartList, product);
+
     setCartList(newCart);
+
     props.toggleDrawer(false);
+
+    openSnackbar({
+      text: "Đã thêm vào giỏ hàng",
+      type: "success",
+      position: "top",
+      duration: 1000,
+    });
   }
 
   const currencyFormat = new Intl.NumberFormat("de-DE", {
@@ -124,6 +138,8 @@ export default function productPicker(props: any) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
+
+  
 
   return (
     <>
