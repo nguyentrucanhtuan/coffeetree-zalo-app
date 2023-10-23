@@ -1,4 +1,4 @@
-import { selector } from "recoil";
+import { selector, selectorFamily } from "recoil";
 import { APILink } from "./setting";
 
 const linkPaymentMethodAPI = APILink + "/payment_list";
@@ -13,3 +13,14 @@ export const paymentMethodListState = selector({
     return res;
   },
 });
+
+
+export const paymentMethodByIdState = selectorFamily({
+  key: "paymentMethodById",
+  get: (paymentId) => ({ get }) => {
+    const paymentList = get(paymentMethodListState);
+    return paymentList.filter(function (item) {
+      return Number(item.id) == Number(paymentId);
+    });
+  }
+})

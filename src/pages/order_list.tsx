@@ -6,6 +6,8 @@ import { userInfoState } from "../recoil-state/userInfo-state";
 import { orderListByStatusState, orderListByZaloNumberState } from "../recoil-state/orderList-state";
 import { allProductListState, productById, productPublicListState } from "../recoil-state/product-state";
 import { folder_image_url } from "../recoil-state/setting";
+import { useNavigate } from "react-router-dom";
+import { cartTotal } from "../recoil-state/cart-state";
 
 export default function OrderListPage() {
 
@@ -35,6 +37,8 @@ export default function OrderListPage() {
         maximumFractionDigits: 0,
     });
 
+    const navigate = useNavigate();
+
     return (
         <Box sx={{ width: "100%" }}>
             <Header title="Lịch sử đơn hàng" />
@@ -58,17 +62,16 @@ export default function OrderListPage() {
 
                     const orderCart = JSON.parse(order.cart);
                     let quantity = 0;
-                    let total = 0;
+                    const totalPrice = cartTotal(orderCart);
 
                     for (var i = 0; i < orderCart.length; i++) {
                         quantity += Number(orderCart[i].quantity);
-                        total += Number(orderCart[i].price) * Number(orderCart[i].quantity);
                     }
 
                     const productFirst = productById(productAllList, Number(orderCart[0].product_id));
 
                     return (
-                        <Box key={order.id}>
+                        <Box key={order.id} onClick={() => navigate(`/checkout_success/${order.id}`)}>
                             <Divider sx={{ borderWidth: "4px" }} />
                             <Box>
                                 <Box sx={{
@@ -91,7 +94,7 @@ export default function OrderListPage() {
                                     <Box sx={{ padding: "8px" }}>
                                         <Typography variant="subtitle2">{productFirst[0].name}</Typography>
                                         <Typography variant="body2">{quantity} sản phẩm</Typography>
-                                        <Typography variant="caption">Tổng {currencyFormat.format(total)}</Typography>
+                                        <Typography variant="caption">Tổng {currencyFormat.format(totalPrice + 25000)}</Typography>
                                     </Box>
                                 </Box>
                             </Box>

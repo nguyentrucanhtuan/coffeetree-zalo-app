@@ -44,3 +44,25 @@ export const addCart = (cart, product) => {
 
   return newCart;
 };
+
+
+export const cartTotal = (cart) => {
+
+  let total = 0;
+
+  for (let i = 0; i < cart.length; i++) {
+
+    let itemTotal = 0;
+
+    itemTotal += Number(cart[i].price);
+
+    for (let x = 0; x < cart[i]["addon"].length; x++) {
+      itemTotal += Number(cart[i]["addon"][x]["price"]);
+    }
+
+    total += itemTotal * Number(cart[i].quantity);
+
+  }
+
+  return total;
+}
