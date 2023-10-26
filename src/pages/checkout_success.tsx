@@ -12,6 +12,8 @@ import { cartTotal } from "../recoil-state/cart-state";
 import { Header } from "zmp-ui";
 import { paymentMethodByIdState } from "../recoil-state/payment-state";
 
+import chatIcon from "../static/chat-icon.png";
+
 const zaloOAId = "1610121007405920472";
 
 export default function CheckoutSuccessPage() {
@@ -266,8 +268,7 @@ export default function CheckoutSuccessPage() {
             <img
               width="64"
               height="64"
-              src="https://img.icons8.com/cute-clipart/64/chat.png"
-              alt="chat"
+              src={chatIcon}
             />
           </Box>
           <Box

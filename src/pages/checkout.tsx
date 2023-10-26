@@ -21,6 +21,8 @@ import { folder_image_url, APILink } from "../recoil-state/setting";
 import { userInfoState } from "../recoil-state/userInfo-state";
 import { useSnackbar } from "zmp-ui";
 
+import cartImage from "../static/cart-image.png";
+
 
 export default function CheckoutPage() {
   const [cartList, setCartList] = useRecoilState(cartState);
@@ -46,8 +48,6 @@ export default function CheckoutPage() {
   };
 
   const userInfoData = useRecoilValue(userInfoState);
-
-  const [noti, setNoti] = React.useState('');
 
   const { openSnackbar, closeSnackbar } = useSnackbar();
 
@@ -108,7 +108,6 @@ export default function CheckoutPage() {
 
       const res = await response.json();
 
-      //reset cartList
       setCartList([]);
 
       navigate("/checkout_success/" + res);
@@ -277,7 +276,7 @@ export default function CheckoutPage() {
         >
           <img
             style={{ width: "300px" }}
-            src="https://img.icons8.com/?size=512&id=119194&format=png"
+            src={cartImage}
           />
           <Typography variant="h6">Hổng có gì trong giỏ hết</Typography>
           <Typography variant="subtitle1">

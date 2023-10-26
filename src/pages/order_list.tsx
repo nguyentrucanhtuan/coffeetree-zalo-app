@@ -11,19 +11,19 @@ import { cartTotal } from "../recoil-state/cart-state";
 
 export default function OrderListPage() {
 
-    const [curentTab, setCurentTab] = React.useState("all");
+    const [statusOrderTab, setStatusOrderTab] = React.useState("all");
 
     const handleChange = (event: React.SyntheticEvent, value: string) => {
-        setCurentTab(value);
+        setStatusOrderTab(value);
     }
 
     const userInfoData = useRecoilValue(userInfoState);
     const listOrderAll = useRecoilValue(orderListByZaloNumberState(userInfoData.phone));
-    const listOrderByStatus = useRecoilValue(orderListByStatusState({ zaloNumber: userInfoData.phone, status: curentTab }));
+    const listOrderByStatus = useRecoilValue(orderListByStatusState({ zaloNumber: userInfoData.phone, status: statusOrderTab }));
 
     let listOrder = [];
 
-    if (curentTab == "all") {
+    if (statusOrderTab == "all") {
         listOrder = listOrderAll;
     } else {
         listOrder = listOrderByStatus;
@@ -44,7 +44,7 @@ export default function OrderListPage() {
             <Header title="Lịch sử đơn hàng" />
             <Box sx={{ bgcolor: "background.paper", marginTop: "43px" }}>
                 <Tabs
-                    value={curentTab}
+                    value={statusOrderTab}
                     onChange={handleChange}
                     variant="scrollable"
                     scrollButtons="auto"

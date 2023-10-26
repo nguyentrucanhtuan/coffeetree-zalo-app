@@ -30,7 +30,7 @@ export default function ProductPage() {
 
   return (
     <>
-      <Header />
+      <Header title="Chi tiết sản phẩm" />
       <Box sx={{ marginBottom: "55px" }}>
         <img
           src={folder_image_url + currentProduct?.images}

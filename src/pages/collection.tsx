@@ -44,7 +44,7 @@ export default function CollectionPage() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      {!isHomepage && <Header />}
+      {!isHomepage && <Header title="Danh mục sản phẩm" />}
       <Box sx={{ bgcolor: "background.paper" }}>
         <Tabs
           value={curentCategoryId}

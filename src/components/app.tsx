@@ -11,11 +11,12 @@ import ProductPage from "../pages/product";
 import CheckoutSuccessPage from "../pages/checkout_success";
 import EditInfoPage from "../pages/edit_info";
 import OrderListPage from "../pages/order_list";
+import AppLoading from "./loading";
 
 const MyApp = () => {
   return (
     <RecoilRoot>
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<AppLoading />}>
         <App>
           <SnackbarProvider>
             <ZMPRouter>
