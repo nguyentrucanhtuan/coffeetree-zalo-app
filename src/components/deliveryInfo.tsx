@@ -45,7 +45,7 @@ export default function DeliveryInfo() {
           <AccountBoxIcon />
           <Box sx={{ marginLeft: "5px", display: "flex" }}>
             <Typography variant="subtitle2">
-              {addressSelect.fullname} - {addressSelect.phone}
+              {addressSelect.fullname == '' ? "Chọn người nhận" : addressSelect.fullname } - {addressSelect.phone == '' ? "Chọn số điện thoại" : addressSelect.phone}
             </Typography>
           </Box>
         </Box>
@@ -53,7 +53,7 @@ export default function DeliveryInfo() {
         <Box sx={{ display: "flex" }}>
           <FmdGoodIcon />
           <Box sx={{ marginLeft: "5px" }}>
-            <Typography variant="caption">{addressSelect.address}</Typography>
+            <Typography variant="caption">{addressSelect.address == '' ? "Chọn địa chỉ" : addressSelect.address }</Typography>
           </Box>
         </Box>
       </Paper>

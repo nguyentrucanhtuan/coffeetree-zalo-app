@@ -12,16 +12,18 @@ import {
 
 import ProductCartList from "../components/productCartList";
 import DeliveryInfo from "../components/deliveryInfo";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { cartState, cartTotalState } from "../recoil-state/cart-state";
 import { useNavigate } from "react-router";
 import { addressSelectState } from "../recoil-state/address-state";
 import { paymentMethodListState } from "../recoil-state/payment-state";
 import { folder_image_url, APILink } from "../recoil-state/setting";
+import { userInfoState } from "../recoil-state/userInfo-state";
+import { useSnackbar } from "zmp-ui";
 
 
 export default function CheckoutPage() {
-  const cartList = useRecoilValue(cartState);
+  const [cartList, setCartList] = useRecoilState(cartState);
   const navigate = useNavigate();
 
   const cartTotal = useRecoilValue(cartTotalState);
@@ -43,52 +45,81 @@ export default function CheckoutPage() {
     setPaymentId(event.target.value);
   };
 
+  const userInfoData = useRecoilValue(userInfoState);
+
+  const [noti, setNoti] = React.useState('');
+
+  const { openSnackbar, closeSnackbar } = useSnackbar();
+
+  const timmerId = React.useRef();
+  React.useEffect(
+    () => () => {
+      closeSnackbar();
+      clearInterval(timmerId.current);
+    },
+    []
+  );
+
   const handleCheckOut = async () => {
+
     const APILinkAddOrder = APILink + "/add_customer_order";
 
     const cart: any = [];
 
-    for (var i = 0; i < cartList["length"]; i++) {
-      const addonList: any = [];
+    if (addressSelect.phone != '') {
 
-      for (var x = 0; x < cartList[i]["addTopping"]["length"]; x++) {
-        addonList.push({
-          product_id: cartList[i]["addTopping"][x]["id"],
-          price: cartList[i]["addTopping"][x]["price"],
+      for (var i = 0; i < cartList["length"]; i++) {
+        const addonList: any = [];
+
+        for (var x = 0; x < cartList[i]["addTopping"]["length"]; x++) {
+          addonList.push({
+            product_id: cartList[i]["addTopping"][x]["id"],
+            price: cartList[i]["addTopping"][x]["price"],
+          });
+        }
+
+        cart.push({
+          product_id: cartList[i]["id"],
+          price: cartList[i]["price"],
+          quantity: cartList[i]["quantity"],
+          addon: addonList,
         });
       }
 
-      cart.push({
-        product_id: cartList[i]["id"],
-        price: cartList[i]["price"],
-        quantity: cartList[i]["quantity"],
-        addon: addonList,
+      const data = {
+        fullname: addressSelect.fullname,
+        phone: addressSelect.phone,
+        email: "email@gmail.com",
+        address: addressSelect.address,
+        zalo_number: userInfoData.phone,
+        shipping_price: shippingFee,
+        cart: JSON.stringify(cart),
+        payment_id: paymentId,
+        note: "ghi chú đơn hàng",
+      };
+
+      const response = await fetch(APILinkAddOrder, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const res = await response.json();
+
+      //reset cartList
+      setCartList([]);
+
+      navigate("/checkout_success/" + res);
+
+    } else {
+      openSnackbar({
+        text: "Vui lòng chọn địa chỉ giao hàng",
+        type: "warning",
+        position: "top",
       });
     }
-
-    const data = {
-      fullname: addressSelect.fullname,
-      phone: addressSelect.phone,
-      email: "nguyentrucanhtuan@gmail.com",
-      address: addressSelect.address,
-      shipping_price: shippingFee,
-      cart: JSON.stringify(cart),
-      payment_id: paymentId,
-      note: "ghi chú đơn hàng",
-    };
-
-    const response = await fetch(APILinkAddOrder, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const res = await response.json();
-
-    console.log("dat hang", res);
-    navigate("/checkout_success/" + res);
   };
 
   if (cartList.length > 0)

@@ -9,9 +9,9 @@ export const addressSelectState = atom({
   key: "addressSelect",
   default: {
     default: true,
-    fullname: "Chọn người nhận",
-    phone: "Chọn số điện thoại",
-    address: "Chọn địa chỉ",
+    fullname: "",
+    phone: "",
+    address: "",
     typeAddress: "",
   },
 });

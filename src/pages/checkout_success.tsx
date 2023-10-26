@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Paper, Typography, Divider, Button, ListItem, Card, CardMedia, CardContent } from "@mui/material";
+import { Box, Paper, Typography, Divider, Button, ListItem, Card, CardMedia, CardContent, Chip, Stack } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import HomeIcon from "@mui/icons-material/Home";
 import { openChat } from "zmp-sdk/apis";
 import { useRecoilValue } from "recoil";
-import { APILink } from "../recoil-state/setting";
+import { APILink, folder_image_url } from "../recoil-state/setting";
 import { allProductListState, productById } from "../recoil-state/product-state";
 import { cartTotal } from "../recoil-state/cart-state";
 import { Header } from "zmp-ui";
@@ -22,9 +22,6 @@ export default function CheckoutSuccessPage() {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
-
-  const folder_image_url = "http://order.coffeetree.vn/storage/";
-  const payment_image = "U8rG4scAzZ0dArokqWummod1ehy6Bj-metaY3JlZGl0LnBuZw==-.png";
 
   const navigate = useNavigate();
 
@@ -65,15 +62,11 @@ export default function CheckoutSuccessPage() {
 
   const cartTotalPrice = cartTotal(cartList);
 
-  console.log('orderInfo', orderInfo?.payment_id);
-
   const paymentType = useRecoilValue(paymentMethodByIdState(orderInfo?.payment_id));
-
-  console.log('paymentType', paymentType); 
 
   return (
     <Box sx={{ backgroundColor: "#fff" }}>
-      <Header title="chi tiết đơn hàng" />
+      <Header title="Chi tiết đơn hàng" />
       <Paper elevation={2} sx={{ margin: "10px", marginTop: "50px", padding: "10px" }}>
         <Box
           sx={{
@@ -137,7 +130,7 @@ export default function CheckoutSuccessPage() {
                     sx={{
                       padding: "0px",
                       paddingTop: "8px",
-                      paddingLeft: "15px",
+                      paddingLeft: "5px",
                       flex: "1 0 auto",
                     }}
                   >
@@ -145,20 +138,15 @@ export default function CheckoutSuccessPage() {
                       {product.name} x {item.quantity}
                     </Typography>
 
-                    <Typography component="div" variant="caption">
+                    <Stack direction="row" spacing={0.3}>
                       {item.addon.map((item: any, i: number) => {
-
                         const topping = productById(productAllList, Number(item.product_id))[0];
-
                         totalTopping += Number(topping.price);
-
                         return (
-                          <Typography key={i} variant="caption">
-                            {topping.name} - {" "}
-                          </Typography>
+                          <Chip key={i} size="small" label={topping.name} variant="outlined" />
                         );
                       })}
-                    </Typography>
+                    </Stack>
 
                     <Typography
                       variant="caption"
