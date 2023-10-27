@@ -74,7 +74,6 @@ const Index = () => {
 
   };
 
-
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
       right: -3,
@@ -145,10 +144,10 @@ const Index = () => {
             textAlign: "center",
           }}
         >
-          <img
+          {/* <img
             src="https://designs.vn/wp-content/images/09-08-2013/logo_lagi_8_resize.JPG"
             style={{ width: 56, height: 56, borderRadius: "50%" }}
-          />
+          /> */}
           <Typography variant="h6">
             Tính năng cần kích hoạt tài khoản
           </Typography>
