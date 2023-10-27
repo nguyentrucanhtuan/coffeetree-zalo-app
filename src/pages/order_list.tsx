@@ -1,16 +1,18 @@
 import React from "react";
 import { Box, Tabs, Tab, Typography, Divider, Chip } from "@mui/material";
 import { Header } from "zmp-ui";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfoState } from "../recoil-state/userInfo-state";
-import { orderListByStatusState, orderListByZaloNumberState } from "../recoil-state/orderList-state";
-import { allProductListState, productById, productPublicListState } from "../recoil-state/product-state";
-import { folder_image_url } from "../recoil-state/setting";
+import { orderListByStatusState, orderListState } from "../recoil-state/orderList-state";
+import { allProductListState, productById } from "../recoil-state/product-state";
+import { APILink, folder_image_url } from "../recoil-state/setting";
 import { useNavigate } from "react-router-dom";
 import { cartTotal } from "../recoil-state/cart-state";
+import AppLoading from "../components/loading";
 
 export default function OrderListPage() {
 
+    const [loading, setLoading] = React.useState(true);
     const [statusOrderTab, setStatusOrderTab] = React.useState("all");
 
     const handleChange = (event: React.SyntheticEvent, value: string) => {
@@ -18,13 +20,31 @@ export default function OrderListPage() {
     }
 
     const userInfoData = useRecoilValue(userInfoState);
-    const listOrderAll = useRecoilValue(orderListByZaloNumberState(userInfoData.phone));
-    const listOrderByStatus = useRecoilValue(orderListByStatusState({ zaloNumber: userInfoData.phone, status: statusOrderTab }));
+    const [listOrderRecoil, setListOrderRecoil] = useRecoilState(orderListState);
 
-    let listOrder = [];
+    const linkOrderAPI = APILink + "/order_list";
+
+    React.useEffect(() => {
+        fetch(linkOrderAPI, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ zalo_number: userInfoData.phone })
+        }).then((response) => {
+            setLoading(false);
+            return response.json();
+        }).then((response) => {
+            setListOrderRecoil(response);
+        });
+    }, []);
+
+    const listOrderByStatus = useRecoilValue(orderListByStatusState(statusOrderTab));
+
+    let listOrder: any = [];
 
     if (statusOrderTab == "all") {
-        listOrder = listOrderAll;
+        listOrder = listOrderRecoil;
     } else {
         listOrder = listOrderByStatus;
     }
@@ -57,51 +77,56 @@ export default function OrderListPage() {
                 </Tabs>
             </Box>
 
-            <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-                {listOrder.map((order: any) => {
+            { loading ? (
+                <AppLoading />
+            ) : (
+                <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+                    {listOrder.map((order: any) => {
 
-                    const orderCart = JSON.parse(order.cart);
-                    let quantity = 0;
-                    const totalPrice = cartTotal(orderCart);
+                        const orderCart = JSON.parse(order.cart);
+                        let quantity = 0;
+                        const totalPrice = cartTotal(orderCart);
 
-                    for (var i = 0; i < orderCart.length; i++) {
-                        quantity += Number(orderCart[i].quantity);
-                    }
+                        for (var i = 0; i < orderCart.length; i++) {
+                            quantity += Number(orderCart[i].quantity);
+                        }
 
-                    const productFirst = productById(productAllList, Number(orderCart[0].product_id));
+                        const productFirst = productById(productAllList, Number(orderCart[0].product_id));
 
-                    return (
-                        <Box key={order.id} onClick={() => navigate(`/checkout_success/${order.id}`)}>
-                            <Divider sx={{ borderWidth: "4px" }} />
-                            <Box>
-                                <Box sx={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    paddingTop: "5px",
-                                    paddingLeft: "15px",
-                                    paddingRight: "10px"
-                                }}>
-                                    <Typography variant="subtitle2">A00{order.id}</Typography>
-                                    <Chip label={order.status} color="success" size="small" variant="outlined" />
-                                </Box>
+                        return (
+                            <Box key={order.id} onClick={() => navigate(`/checkout_success/${order.id}`)}>
+                                <Divider sx={{ borderWidth: "4px" }} />
+                                <Box>
+                                    <Box sx={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        paddingTop: "5px",
+                                        paddingLeft: "15px",
+                                        paddingRight: "10px"
+                                    }}>
+                                        <Typography variant="subtitle2">A00{order.id}</Typography>
+                                        <Chip label={order.status} color="success" size="small" variant="outlined" />
+                                    </Box>
 
-                                <Box sx={{ display: "flex", padding: "10px" }}>
-                                    <img
-                                        src={folder_image_url + productFirst[0].images}
-                                        style={{ width: 80, height: 80 }}
-                                    />
-                                    <Box sx={{ padding: "8px" }}>
-                                        <Typography variant="subtitle2">{productFirst[0].name}</Typography>
-                                        <Typography variant="body2">{quantity} sản phẩm</Typography>
-                                        <Typography variant="caption">Tổng {currencyFormat.format(totalPrice + 25000)}</Typography>
+                                    <Box sx={{ display: "flex", padding: "10px" }}>
+                                        <img
+                                            src={folder_image_url + productFirst[0].images}
+                                            style={{ width: 80, height: 80 }}
+                                        />
+                                        <Box sx={{ padding: "8px" }}>
+                                            <Typography variant="subtitle2">{productFirst[0].name}</Typography>
+                                            <Typography variant="body2">{quantity} sản phẩm</Typography>
+                                            <Typography variant="caption">Tổng {currencyFormat.format(totalPrice + 25000)}</Typography>
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                    )
-                })}
-            </Box>
+                        )
+                    })}
+                </Box>
+            )}
+
         </Box>
     );
 }

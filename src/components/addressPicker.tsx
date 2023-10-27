@@ -121,10 +121,7 @@ export default function AddressPicker(props: any) {
   };
 
   const handleDeleteOK = (id: any) => {
-    const addressListData: any = addressList.filter(function (
-      item: any,
-      index: any,
-    ) {
+    const addressListData: any = addressList.filter(function (item: any, index: any) {
       return index != id;
     });
 
@@ -234,21 +231,6 @@ export default function AddressPicker(props: any) {
               <Button onClick={() => handleDelete(addressEditId)}>Xóa</Button>
             </Box>
           </Grid>
-          {/* <Grid item xs={12}>
-                        <FormControl>
-                            <FormLabel id="demo-row-radio-buttons-group-label">Loại địa chỉ</FormLabel>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
-                                defaultValue="vp"
-                            >
-                                <FormControlLabel value="vp" control={<Radio />} label="Văn phòng" />
-                                <FormControlLabel value="nr" control={<Radio />} label="Nhà riêng" />
-
-                            </RadioGroup>
-                        </FormControl>
-                    </Grid> */}
 
           <Paper
             sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
