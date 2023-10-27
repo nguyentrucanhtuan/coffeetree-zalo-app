@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar, Box, Drawer, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Drawer, Typography, styled } from "@mui/material";
 
 import {
   BottomNavigation,
@@ -18,8 +18,9 @@ import CollectionPage from "./collection";
 import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
 import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo } from "zmp-sdk/apis";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { checkPhoneAccess, saveZaloInfoToCache, saveZaloNumberToCache, userInfoState } from "../recoil-state/userInfo-state";
+import { cartTotalQuantityState } from "../recoil-state/cart-state";
 
 
 const Index = () => {
@@ -73,6 +74,18 @@ const Index = () => {
 
   };
 
+
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      right: -3,
+      top: 13,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: '0 5px',
+    },
+  }));
+
+  const cartQuantity = useRecoilValue(cartTotalQuantityState);
+
   return (
     <>
       <Box>
@@ -107,7 +120,7 @@ const Index = () => {
             <BottomNavigationAction
               value="checkout"
               label="Giỏ hàng"
-              icon={<ShoppingBasketIcon />}
+              icon={<StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >}
             />
             <BottomNavigationAction
               value="profile"

@@ -282,9 +282,9 @@ export default function CheckoutPage() {
           <Typography variant="subtitle1">
             Lướt CoffeeTree, lựa cà phê ngay đi!
           </Typography>
-          <Button variant="outlined" onClick={() => navigate("/")}>
+          {/* <Button variant="outlined" onClick={() => navigate("/")}>
             Mua sắm ngay
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     );

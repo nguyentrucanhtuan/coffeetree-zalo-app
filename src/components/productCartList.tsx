@@ -25,6 +25,7 @@ export default function ProductCartList() {
   const [deleteID, setDeleteID] = React.useState();
 
   const [cartList, setCartList] = useRecoilState(cartState);
+  //console.log('cartList', cartList)
 
   const handleOpenDialogDeleteCart = (id) => {
     setOpenDialog(true);

@@ -80,7 +80,7 @@ export default function OrderListPage() {
             { loading ? (
                 <AppLoading />
             ) : (
-                <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+                <Box sx={{ width: "100%", bgcolor: "background.paper"}}>
                     {listOrder.map((order: any) => {
 
                         const orderCart = JSON.parse(order.cart);
@@ -93,6 +93,34 @@ export default function OrderListPage() {
 
                         const productFirst = productById(productAllList, Number(orderCart[0].product_id));
 
+                        let colorStatus = "#f44336";
+                        let colorBackgroundStatus = "#ffebee";
+                        let orderStatus = "Chờ xác nhận";
+
+                        if(order.status == "pending") {
+                            colorStatus = "#f44336";
+                            colorBackgroundStatus = "#ffebee";
+                            orderStatus = "Chờ xác nhận";
+                        }
+
+                        if(order.status == "processing") {
+                            colorStatus = "#2196f3";
+                            colorBackgroundStatus = "#e3f2fd";
+                            orderStatus = "Đang sử lý";
+                        }
+
+                        if(order.status == "completed") {
+                            colorStatus = "#009688";
+                            colorBackgroundStatus = "#e0f2f1";
+                            orderStatus = "Đã hoàn thành";
+                        }
+
+                        if(order.status == "declined") {
+                            colorStatus = "#607d8b";
+                            colorBackgroundStatus = "#eceff1";
+                            orderStatus = "Đã hủy";
+                        }
+
                         return (
                             <Box key={order.id} onClick={() => navigate(`/checkout_success/${order.id}`)}>
                                 <Divider sx={{ borderWidth: "4px" }} />
@@ -103,10 +131,24 @@ export default function OrderListPage() {
                                         alignItems: "center",
                                         paddingTop: "5px",
                                         paddingLeft: "15px",
-                                        paddingRight: "10px"
+                                        paddingRight: "10px",
                                     }}>
                                         <Typography variant="subtitle2">A00{order.id}</Typography>
-                                        <Chip label={order.status} color="success" size="small" variant="outlined" />
+                                        <span 
+                                            style={{
+                                                color: colorStatus,
+                                                background: colorBackgroundStatus,
+                                                fontSize: "11px",
+                                                fontWeight: "bold",
+                                                fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+                                                border: "1px solid",
+                                                paddingLeft: "8px",
+                                                paddingRight: "8px",
+                                                borderRadius: "16px",
+                                            }}
+                                        >
+                                            {orderStatus}
+                                        </span>
                                     </Box>
 
                                     <Box sx={{ display: "flex", padding: "10px" }}>
