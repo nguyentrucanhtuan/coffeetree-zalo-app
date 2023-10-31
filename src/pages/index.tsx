@@ -19,7 +19,7 @@ import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
 import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo } from "zmp-sdk/apis";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { checkPhoneAccess, saveZaloInfoToCache, saveZaloNumberToCache, userInfoState } from "../recoil-state/userInfo-state";
+import { CallServerGetPhoneNumber, CallAndSaveZaloNumber, checkPhoneAccess, saveZaloInfoToCache, saveZaloNumberToCache, userInfoState } from "../recoil-state/userInfo-state";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
 
 
@@ -40,25 +40,27 @@ const Index = () => {
 
   const handleOpenPhoneAccess = () => {
 
-    //Gọi API để lấy dữ liệu user và Phone Number
+    //Lấy zalo number và lưu vào cache
+    CallAndSaveZaloNumber();
 
-    //Lưu data vào cache
-    saveZaloNumberToCache("84834234734");
-    saveZaloInfoToCache('929283784747_number','929283784747882_demo','Anh Tuan demo','https://i.pravatar.cc/300',false);
+    getStorage({
+      keys: ["zaloNumber"],
+      success: (data) => {
+        // xử lý khi gọi api thành công
+        const { zaloNumber } = data;
 
-    //Lưu vào recoil
-    setUserInfoData({
-      id: "929283784747_demo",
-      idByOA: "929283784747882_demo",
-      name: "Anh Tuan demo",
-      avatar: "https://i.pravatar.cc/300",
-      phone: "84834234734",
-      email: "",
-      gender: ""
+        setUserInfoData({
+          ...userInfoData,
+          phone: zaloNumber
+        })
+      },
+      fail: (error) => {
+        // xử lý khi gọi api thất bại
+        console.log(error);
+      }
     });
 
     toggelDrawerAccessPhone(false);
-
   };
 
   const handleBottomNavigation = (event: any, newValue: any) => {

@@ -1,5 +1,7 @@
 import { atom, useRecoilValue } from "recoil";
-import { setStorage } from "zmp-sdk/apis";
+import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo } from "zmp-sdk/apis";
+import { APILink } from "./setting";
+
 export const userInfoState = atom({
   key: "UserInfo",
   default: {
@@ -58,71 +60,41 @@ export const saveZaloInfoToCache = (id, idByOA, name, avatar, isSensitive) => {
   })
 }
 
+export const CallServerGetPhoneNumber = (accessToken, token) => {
+  fetch(APILink + '/get_phone_number_by_zalo_token', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ access_token: accessToken, code: token })
+  }).then((response) => {
+    return response.json();
+  }).then((res) => {
+    //Lưu vào cache
+    saveZaloNumberToCache(res.data.number)
+    console.log('zalo_number', res.data.number);
+  })
+}
+
 export const CallAndSaveZaloNumber = () => {
-
-  //LƯU TẠM CODE NÀY Ở ĐÂY
-
-  // //Bước 1: Lấy accessToken Zalo
-  // getAccessToken({
-  //   success: (accessToken) => {
-  //     // xử lý khi gọi api thành công
-  //     setAccessTokenState(accessToken);
-  //   },
-  //   fail: (error) => {
-  //     // xử lý khi gọi api thất bại
-  //     console.log(error);
-  //   }
-  // });
-
-  // //Bước 2: Lấy token code Zalo
-  // getPhoneNumber({
-  //   success: async (data) => {
-  //     const { token } = data;
-  //     setTokenState(token);
-  //     toggelDrawerAccessPhone(false);
-  //   },
-  //   fail: (error) => {
-  //     // Xử lý khi gọi api thất bại
-  //     console.log(error);
-  //   },
-  // });
-
-  // const zaloToken = { access_token: accessTokenState, code: tokenState };
-
-  // //Bước 3: Gọi lên server để lấy ZaloNumber
-  // fetch('https://order.coffeetree.vn/api/get_phone_number_by_zalo_token', {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(zaloToken)
-  // }).then((response) => {
-  //   console.log('response from coffeetree server', response);
-  //   return response.json();
-  // }).then((res) => {
-  //   console.log('data server', res)
-  //   console.log('so dien thoai', res.data.number);
-  //   const zaloNumber_demo = "84834234734_demo";
-
-  //   //Lưu vào cache
-  //   setStorage({
-  //     data: {
-  //       zaloNumber: zaloNumber_demo,
-  //     },
-  //     success: (data) => {
-  //       const { errorKeys } = data;
-  //       console.log("errorKeys", errorKeys);
-  //     },
-  //     fail: (error) => {
-  //       console.log(error);
-  //     },
-  //   });
-
-  //   //Lưu vào recoil
-  //   setUserInfoData({
-  //     ...userInfoData,
-  //     phone: zaloNumber_demo,
-  //   });
-
-  // })
+  //Bước 1: Lấy accessToken Zalo
+  getAccessToken({
+    success: (accessToken) => {
+      //Bước 2: Lấy token code Zalo
+      getPhoneNumber({
+        success: async (data) => {
+          const { token } = data;
+          CallServerGetPhoneNumber(accessToken, token);
+        },
+        fail: (error) => {
+          // Xử lý khi gọi api thất bại
+          console.log(error);
+        },
+      });
+    },
+    fail: (error) => {
+      // xử lý khi gọi api thất bại
+      console.log(error);
+    }
+  });
 }
