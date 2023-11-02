@@ -1,4 +1,4 @@
-import { atom, useRecoilValue } from "recoil";
+import { atom, useRecoilValue, useRecoilState } from "recoil";
 import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo } from "zmp-sdk/apis";
 import { APILink } from "./setting";
 
@@ -77,24 +77,26 @@ export const CallServerGetPhoneNumber = (accessToken, token) => {
 }
 
 export const CallAndSaveZaloNumber = () => {
-  //Bước 1: Lấy accessToken Zalo
-  getAccessToken({
-    success: (accessToken) => {
-      //Bước 2: Lấy token code Zalo
-      getPhoneNumber({
-        success: async (data) => {
-          const { token } = data;
+  //Bước 1: Lấy token code Zalo
+  getPhoneNumber({
+    success: async (data) => {
+
+      const { token } = data;
+      getAccessToken({
+        success: (accessToken) => {
+          // xử lý khi gọi api thành công
           CallServerGetPhoneNumber(accessToken, token);
         },
         fail: (error) => {
-          // Xử lý khi gọi api thất bại
+          // xử lý khi gọi api thất bại
           console.log(error);
-        },
+        }
       });
+      
     },
     fail: (error) => {
-      // xử lý khi gọi api thất bại
+      // Xử lý khi gọi api thất bại
       console.log(error);
-    }
+    },
   });
 }

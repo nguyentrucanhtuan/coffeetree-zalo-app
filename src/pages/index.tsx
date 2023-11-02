@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar, Badge, Box, Drawer, Typography, styled } from "@mui/material";
+import { Badge, Box, Drawer, Typography, styled } from "@mui/material";
 
 import {
   BottomNavigation,
@@ -17,13 +17,21 @@ import HomePage from "./home";
 import CollectionPage from "./collection";
 import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
-import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo } from "zmp-sdk/apis";
+import { clearStorage, getPhoneNumber, getStorage, getUserInfo } from "zmp-sdk/apis";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { CallServerGetPhoneNumber, CallAndSaveZaloNumber, checkPhoneAccess, saveZaloInfoToCache, saveZaloNumberToCache, userInfoState } from "../recoil-state/userInfo-state";
+import { CallAndSaveZaloNumber, userInfoState, checkPhoneAccess, saveZaloInfoToCache } from "../recoil-state/userInfo-state";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
 
-
 const Index = () => {
+
+  const clearData = async () => {
+    try {
+      await clearStorage({});
+    } catch (error) {
+      // xử lý khi gọi api thất bại
+      console.log(error);
+    }
+  };
 
   const [value, setValue] = React.useState("home");
 
@@ -35,24 +43,80 @@ const Index = () => {
 
   const [userInfoData, setUserInfoData] = useRecoilState(userInfoState);
 
-  const [accessTokenState, setAccessTokenState] = useState("");
-  const [tokenState, setTokenState] = useState("");
+  const [checkAccess, setcheckAccess] = useState(false);
 
+  React.useEffect(() => {
+    getStorage({
+      keys: ["zaloNumber", "zaloIdByOA", "zaloId", "zaloName", "zaloAvatar"],
+      success: (data) => {
+        // xử lý khi gọi api thành công
+        const { zaloNumber, zaloIdByOA, zaloId, zaloName, zaloAvatar} = data;
+
+        setUserInfoData({
+          ...userInfoData,
+          phone: zaloNumber,
+          idByOA: zaloIdByOA,
+          id : zaloId,
+          name : zaloName,
+          avatar: zaloAvatar,
+        })
+
+        if(zaloNumber != "" && zaloNumber != null) {
+          setcheckAccess(true)
+        }
+        
+        console.log("zaloNumber cache", data)
+      },
+      fail: (error) => {
+        // xử lý khi gọi api thất bại
+        console.log(error);
+      }
+    });
+  }, []);
+  
   const handleOpenPhoneAccess = () => {
 
     //Lấy zalo number và lưu vào cache
     CallAndSaveZaloNumber();
 
+    //load Phone From Cache To Recoil;
     getStorage({
       keys: ["zaloNumber"],
       success: (data) => {
         // xử lý khi gọi api thành công
         const { zaloNumber } = data;
-
+  
         setUserInfoData({
           ...userInfoData,
           phone: zaloNumber
         })
+
+        if(zaloNumber != "" && zaloNumber != null ) {
+          setcheckAccess(true)
+        }
+  
+      },
+      fail: (error) => {
+        // xử lý khi gọi api thất bại
+        console.log(error);
+      }
+    });
+
+    getUserInfo({
+      success: (data) => {
+        // xử lý khi gọi api thành công
+        const { userInfo } = data;
+  
+        console.log('userInfo', userInfo);
+
+        setUserInfoData({
+          ...userInfoData,
+          id: userInfoData.id,
+          name: userInfoData.name,
+          avatar: userInfoData.avatar,
+        })
+
+        saveZaloInfoToCache(userInfo.id, userInfo.idByOA, userInfo.name, userInfo.avatar)
       },
       fail: (error) => {
         // xử lý khi gọi api thất bại
@@ -66,11 +130,11 @@ const Index = () => {
   const handleBottomNavigation = (event: any, newValue: any) => {
 
     //setValue(newValue);
-    if ((newValue == "profile" || newValue == "checkout") && userInfoData.phone == "") {
+    if ((newValue == "profile" || newValue == "checkout") && checkAccess == false ) { // (userInfoData.phone != "" && userInfoData.phone != null))
       toggelDrawerAccessPhone(true);
     }
 
-    if (newValue == "home" || newValue == "collection" || userInfoData.phone != "") {
+    if (newValue == "home" || newValue == "collection" || checkAccess == true)  { //  (userInfoData.phone != "" && userInfoData.phone != null))
       setValue(newValue);
     }
 
@@ -87,9 +151,12 @@ const Index = () => {
 
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
+  
+  
   return (
     <>
       <Box>
+        <Button onClick={()=> {clearData()}}>Clear Data </Button>
         <Box sx={{ marginBottom: "60px" }}>
           {value == "home" && <HomePage />}
           {value == "collection" && <CollectionPage />}
@@ -146,10 +213,10 @@ const Index = () => {
             textAlign: "center",
           }}
         >
-          {/* <img
+          <img
             src="https://designs.vn/wp-content/images/09-08-2013/logo_lagi_8_resize.JPG"
             style={{ width: 56, height: 56, borderRadius: "50%" }}
-          /> */}
+          />
           <Typography variant="h6">
             Tính năng cần kích hoạt tài khoản
           </Typography>

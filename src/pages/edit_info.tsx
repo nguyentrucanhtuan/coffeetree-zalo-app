@@ -4,9 +4,7 @@ import { Avatar, Header } from "zmp-ui";
 import { getStorage, getUserInfo, setStorage } from "zmp-sdk";
 import { useRecoilState } from "recoil";
 import { userInfoState } from "../recoil-state/userInfo-state";
-
 import { useSnackbar } from "zmp-ui";
-
 
 const EditInfoPage = () => {
 
