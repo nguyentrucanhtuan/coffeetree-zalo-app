@@ -68,7 +68,7 @@ export default function productPicker(props: any) {
       return item.id == event.target.value;
     });
 
-    let toppingListNew: any[] = [];
+    let toppingListNew = [];
 
     if (event.target.checked == true) {
       toppingListNew = [...toppingList, addonProduct[0]];
@@ -137,8 +137,6 @@ export default function productPicker(props: any) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
-
-  
 
   return (
     <>

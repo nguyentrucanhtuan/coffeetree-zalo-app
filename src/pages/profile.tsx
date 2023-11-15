@@ -93,7 +93,7 @@ export default function ProfilePage() {
         <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
           <nav aria-label="main mailbox folders">
             <List>
-              <ListItem disablePadding>
+              {/* <ListItem disablePadding>
                 <ListItemButton onClick={() => navigate('/editInfo')}>
                   <ListItemIcon>
                     <ContactPhoneIcon />
@@ -102,7 +102,7 @@ export default function ProfilePage() {
                   <NavigateNextIcon />
                 </ListItemButton>
               </ListItem>
-              <Divider />
+              <Divider /> */}
 
               <ListItem disablePadding>
                 <ListItemButton onClick={() => navigate('/orderList')} >

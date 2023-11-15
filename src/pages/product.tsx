@@ -1,17 +1,35 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { Box, Paper, Button, Typography, Divider, Drawer } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { Box, Paper, Button, Typography, Divider, Drawer, styled, Badge } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { allProductListState } from "../recoil-state/product-state";
 import ProductPicker from "../components/productPicker";
 import { Header } from "zmp-ui";
 import { folder_image_url } from "../recoil-state/setting";
+import { getStorage } from "zmp-sdk";
+import { userInfoState } from "../recoil-state/userInfo-state";
+import DrawerPhoneAccess from "../components/drawerPhoneAcess";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import { cartTotalQuantityState } from "../recoil-state/cart-state";
 
 export default function ProductPage() {
+
   const [openDrawer, setOpenDrawer] = React.useState(false);
+  const [openDrawerAccessPhone, setOpenDrawerAccessPhone] = React.useState(false);
 
   function toggleDrawer(newOpen: boolean) {
     setOpenDrawer(newOpen);
+  }
+
+  const userInfo = useRecoilValue(userInfoState);
+
+  const handleClickOrder = () => {
+
+    if(userInfo.phone == null) {
+      setOpenDrawerAccessPhone(true);
+    } else {
+      toggleDrawer(true)
+    }
   }
 
   let { productId } = useParams();
@@ -27,6 +45,19 @@ export default function ProductPage() {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
+
+  const navigate = useNavigate();
+
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      right: 2,
+      top: 5,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: '0 5px',
+    },
+  }));
+  
+  const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
   return (
     <>
@@ -57,16 +88,28 @@ export default function ProductPage() {
         elevation={3}
       >
         <Box sx={{ display: "flex" }}>
+
           <Button
             onClick={() => {
-              toggleDrawer(true);
+              navigate('/index/checkout')
+            }}
+            variant="outlined"
+            size="large"
+            startIcon={<StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >}
+            sx={{ margin: "5px", width: "100%" }}
+          >
+            Giỏ hàng
+          </Button>
+          <Button
+            onClick={() => {
+              handleClickOrder();
             }}
             variant="contained"
             size="large"
             color="success"
             sx={{ margin: "5px", width: "100%" }}
           >
-            Mua ngay
+            Thêm vào giỏ
           </Button>
         </Box>
       </Paper>
@@ -78,6 +121,9 @@ export default function ProductPage() {
       >
         <ProductPicker product={currentProduct} toggleDrawer={toggleDrawer} />
       </Drawer>
+
+      <DrawerPhoneAccess open={openDrawerAccessPhone} setOpenDrawerAccessPhone={setOpenDrawerAccessPhone} setOpenDrawer={setOpenDrawer}/>
+      
     </>
   );
 }

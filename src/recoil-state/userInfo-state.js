@@ -1,5 +1,5 @@
 import { atom, useRecoilValue, useRecoilState } from "recoil";
-import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo } from "zmp-sdk/apis";
+import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo, followOA } from "zmp-sdk/apis";
 import { APILink } from "./setting";
 
 export const userInfoState = atom({
@@ -72,31 +72,49 @@ export const CallServerGetPhoneNumber = (accessToken, token) => {
   }).then((res) => {
     //Lưu vào cache
     saveZaloNumberToCache(res.data.number)
-    console.log('zalo_number', res.data.number);
   })
 }
 
 export const CallAndSaveZaloNumber = () => {
-  //Bước 1: Lấy token code Zalo
-  getPhoneNumber({
-    success: async (data) => {
-
-      const { token } = data;
-      getAccessToken({
-        success: (accessToken) => {
-          // xử lý khi gọi api thành công
+  //Bước 1: Lấy access token
+  getAccessToken({
+    success: (accessToken) => {
+      //Bước 2: Lấy token code
+      getPhoneNumber({
+        success: async (data) => {
+          const { token } = data;
+          //Bước 3: Gọi lên server để trả về zaloNumber và lưu vào Cache
           CallServerGetPhoneNumber(accessToken, token);
         },
         fail: (error) => {
-          // xử lý khi gọi api thất bại
+          // Xử lý khi gọi api thất bại
           console.log(error);
-        }
+        },
       });
-      
     },
     fail: (error) => {
-      // Xử lý khi gọi api thất bại
+      // xử lý khi gọi api thất bại
       console.log(error);
+    }
+  });
+}
+
+export const getAccessTokenZalo = () => {
+  getAccessToken({
+    success: (accessToken) => {
+      // xử lý khi gọi api thành công
     },
+    fail: (error) => {
+      // xử lý khi gọi api thất bại
+      console.log(error);
+    }
+  });
+}
+
+export const callFollowOA = () => {
+  followOA({
+    id: "1610121007405920472",
+    success: (res) => {},
+    fail: (err) => {}
   });
 }

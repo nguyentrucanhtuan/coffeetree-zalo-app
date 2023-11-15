@@ -19,10 +19,17 @@ import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
 import { clearStorage, getPhoneNumber, getStorage, getUserInfo } from "zmp-sdk/apis";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { CallAndSaveZaloNumber, userInfoState, checkPhoneAccess, saveZaloInfoToCache } from "../recoil-state/userInfo-state";
+import { CallAndSaveZaloNumber, userInfoState, checkPhoneAccess, saveZaloInfoToCache, getAccessTokenZalo, callFollowOA } from "../recoil-state/userInfo-state";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
+import { followOA } from "zmp-sdk";
+import { useParams } from "react-router-dom";
 
 const Index = () => {
+  //Hiện popup zalo
+  //callFollowOA();
+  getAccessTokenZalo();
+
+  let { tabValue } = useParams();
 
   const clearData = async () => {
     try {
@@ -31,9 +38,18 @@ const Index = () => {
       // xử lý khi gọi api thất bại
       console.log(error);
     }
-  };
 
-  const [value, setValue] = React.useState("home");
+    //setUserInfoData(null);
+  };
+  
+
+  let tabDefault = "home"; 
+
+  if(tabValue != null){
+    tabDefault = tabValue;
+  }
+
+  const [value, setValue] = React.useState(tabDefault);
 
   const [openDrawerAccessPhone, setOpenDrawerAccessPhone] = React.useState(false);
 
@@ -50,7 +66,7 @@ const Index = () => {
       keys: ["zaloNumber", "zaloIdByOA", "zaloId", "zaloName", "zaloAvatar"],
       success: (data) => {
         // xử lý khi gọi api thành công
-        const { zaloNumber, zaloIdByOA, zaloId, zaloName, zaloAvatar} = data;
+        const { zaloNumber, zaloIdByOA, zaloId, zaloName, zaloAvatar } = data;
 
         setUserInfoData({
           ...userInfoData,
@@ -65,7 +81,7 @@ const Index = () => {
           setcheckAccess(true)
         }
         
-        console.log("zaloNumber cache", data)
+        console.log("zalo cache", data)
       },
       fail: (error) => {
         // xử lý khi gọi api thất bại
@@ -128,16 +144,7 @@ const Index = () => {
   };
 
   const handleBottomNavigation = (event: any, newValue: any) => {
-
-    //setValue(newValue);
-    if ((newValue == "profile" || newValue == "checkout") && checkAccess == false ) { // (userInfoData.phone != "" && userInfoData.phone != null))
-      toggelDrawerAccessPhone(true);
-    }
-
-    if (newValue == "home" || newValue == "collection" || checkAccess == true)  { //  (userInfoData.phone != "" && userInfoData.phone != null))
-      setValue(newValue);
-    }
-
+    setValue(newValue);
   };
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -150,13 +157,13 @@ const Index = () => {
   }));
 
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
-
-  
   
   return (
     <>
       <Box>
-        {/* <Button onClick={()=> {clearData()}}>Clear Data </Button> */}
+
+        <Button onClick={()=> {clearData()}}>Clear Data</Button>
+
         <Box sx={{ marginBottom: "60px" }}>
           {value == "home" && <HomePage />}
           {value == "collection" && <CollectionPage />}
