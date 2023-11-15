@@ -37,10 +37,12 @@ export default function CollectionPage() {
   let isHomepage = false;
   let marginTopValue = "43px";
 
-  if (location.pathname === "/") {
+  if (location.pathname === "/" || location.pathname === "/index/checkout") {
     isHomepage = true;
     marginTopValue = "0px";
   }
+
+  console.log('location.pathname', location.pathname);
 
   return (
     <Box sx={{ width: "100%" }}>
