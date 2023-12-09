@@ -27,9 +27,9 @@ export default function CollectionPage() {
   };
 
   const collectionList = useRecoilValue(collectionPublicListState);
-
+  
   const productListByCollection = useRecoilValue(
-    productsByCollectionState(curentCategoryId)
+    productsByCollectionState(curentCategoryId),
   );
 
   const location = useLocation();
@@ -42,7 +42,7 @@ export default function CollectionPage() {
     marginTopValue = "0px";
   }
 
-  console.log("location.pathname", location.pathname);
+  console.log('location.pathname', location.pathname);
 
   return (
     <Box sx={{ width: "100%" }}>

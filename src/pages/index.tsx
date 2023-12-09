@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Badge, Box, Drawer, Typography, styled } from "@mui/material";
+import React from "react";
+import { Badge, Box, styled } from "@mui/material";
 
 import {
   BottomNavigation,
@@ -17,24 +17,12 @@ import HomePage from "./home";
 import CollectionPage from "./collection";
 import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
-import {
-  clearStorage,
-  getPhoneNumber,
-  getStorage,
-  getUserInfo,
-} from "zmp-sdk/apis";
+import { clearStorage, getStorage } from "zmp-sdk/apis";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  CallAndSaveZaloNumber,
-  userInfoState,
-  checkPhoneAccess,
-  saveZaloInfoToCache,
-  getAccessTokenZalo,
-  callFollowOA,
-} from "../recoil-state/userInfo-state";
+import { userInfoState, getAccessTokenZalo } from "../recoil-state/userInfo-state";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
-import { followOA } from "zmp-sdk";
 import { useParams } from "react-router-dom";
+import TopBar from "../components/topBar";
 
 const Index = () => {
   //Hiện popup zalo
@@ -50,10 +38,10 @@ const Index = () => {
       console.log(error);
     }
   };
+  
+  let tabDefault = "home"; 
 
-  let tabDefault = "home";
-
-  if (tabValue != null) {
+  if(tabValue != null){
     tabDefault = tabValue;
   }
 
@@ -72,17 +60,17 @@ const Index = () => {
           ...userInfoData,
           phone: zaloNumber,
           idByOA: zaloIdByOA,
-          id: zaloId,
-          name: zaloName,
+          id : zaloId,
+          name : zaloName,
           avatar: zaloAvatar,
-        });
+        })
 
-        console.log("zalo cache", data);
+        console.log("zalo cache", data)
       },
       fail: (error) => {
         // xử lý khi gọi api thất bại
         console.log(error);
-      },
+      }
     });
   }, []);
 
@@ -91,28 +79,24 @@ const Index = () => {
   };
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
-    "& .MuiBadge-badge": {
+    '& .MuiBadge-badge': {
       right: -3,
       top: 13,
       border: `2px solid ${theme.palette.background.paper}`,
-      padding: "0 5px",
+      padding: '0 5px',
     },
   }));
 
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
-
+  
   return (
     <>
+      <TopBar />
       <Box>
-        {/* <Button
-          onClick={() => {
-            clearData();
-          }}
-        >
-          Clear Data
-        </Button> */}
 
-        <Box sx={{ marginBottom: "60px" }}>
+        {/* <Button onClick={()=> {clearData()}}>Clear Data</Button> */}
+
+        <Box sx={{ marginBottom: "60px", marginTop: "48px" }}>
           {value == "home" && <HomePage />}
           {value == "collection" && <CollectionPage />}
           {value == "checkout" && <CheckoutPage />}
@@ -143,11 +127,7 @@ const Index = () => {
             <BottomNavigationAction
               value="checkout"
               label="Giỏ hàng"
-              icon={
-                <StyledBadge badgeContent={cartQuantity} color="secondary">
-                  <ShoppingBasketIcon />
-                </StyledBadge>
-              }
+              icon={<StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >}
             />
             <BottomNavigationAction
               value="profile"
@@ -157,6 +137,7 @@ const Index = () => {
           </BottomNavigation>
         </Paper>
       </Box>
+
     </>
   );
 };

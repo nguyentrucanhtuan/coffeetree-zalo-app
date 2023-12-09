@@ -1,12 +1,5 @@
 import { atom, useRecoilValue, useRecoilState } from "recoil";
-import {
-  getPhoneNumber,
-  getAccessToken,
-  setStorage,
-  getStorage,
-  getUserInfo,
-  followOA,
-} from "zmp-sdk/apis";
+import { getPhoneNumber, getAccessToken, setStorage, getStorage, getUserInfo, followOA } from "zmp-sdk/apis";
 import { APILink } from "./setting";
 
 export const userInfoState = atom({
@@ -18,11 +11,12 @@ export const userInfoState = atom({
     avatar: "",
     phone: "",
     email: "",
-    gender: "",
+    gender: ""
   },
 });
 
 export const checkPhoneAccess = () => {
+
   const userInfo = useRecoilValue(userInfoState);
 
   if (userInfo.phone != "") {
@@ -30,7 +24,7 @@ export const checkPhoneAccess = () => {
   }
 
   return false;
-};
+}
 
 export const saveZaloNumberToCache = (phoneNumber) => {
   setStorage({
@@ -45,7 +39,7 @@ export const saveZaloNumberToCache = (phoneNumber) => {
       console.log(error);
     },
   });
-};
+}
 
 export const saveZaloInfoToCache = (id, idByOA, name, avatar, isSensitive) => {
   setStorage({
@@ -54,7 +48,7 @@ export const saveZaloInfoToCache = (id, idByOA, name, avatar, isSensitive) => {
       zaloIdByOA: idByOA,
       zaloName: name,
       zaloAvatar: avatar,
-      zaloIsSensitive: isSensitive,
+      zaloIsSensitive: isSensitive
     },
     success: (data) => {
       const { errorKeys } = data;
@@ -63,25 +57,23 @@ export const saveZaloInfoToCache = (id, idByOA, name, avatar, isSensitive) => {
     fail: (error) => {
       console.log(error);
     },
-  });
-};
+  })
+}
 
 export const CallServerGetPhoneNumber = (accessToken, token) => {
-  fetch(APILink + "/get_phone_number_by_zalo_token", {
+  fetch(APILink + '/get_phone_number_by_zalo_token', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ access_token: accessToken, code: token }),
+    body: JSON.stringify({ access_token: accessToken, code: token })
+  }).then((response) => {
+    return response.json();
+  }).then((res) => {
+    //Lưu vào cache
+    saveZaloNumberToCache(res.data.number)
   })
-    .then((response) => {
-      return response.json();
-    })
-    .then((res) => {
-      //Lưu vào cache
-      saveZaloNumberToCache(res.data.number);
-    });
-};
+}
 
 export const CallAndSaveZaloNumber = () => {
   //Bước 1: Lấy access token
@@ -103,9 +95,9 @@ export const CallAndSaveZaloNumber = () => {
     fail: (error) => {
       // xử lý khi gọi api thất bại
       console.log(error);
-    },
+    }
   });
-};
+}
 
 export const getAccessTokenZalo = () => {
   getAccessToken({
@@ -115,14 +107,14 @@ export const getAccessTokenZalo = () => {
     fail: (error) => {
       // xử lý khi gọi api thất bại
       console.log(error);
-    },
+    }
   });
-};
+}
 
 export const callFollowOA = () => {
   followOA({
     id: "1610121007405920472",
     success: (res) => {},
-    fail: (err) => {},
+    fail: (err) => {}
   });
-};
+}

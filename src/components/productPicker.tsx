@@ -111,6 +111,7 @@ export default function productPicker(props: any) {
   const { openSnackbar } = useSnackbar();
 
   function handleAddToCart() {
+
     const product = {
       ...productAddCart,
       addTopping: toppingList,

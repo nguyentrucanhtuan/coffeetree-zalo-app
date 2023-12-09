@@ -24,6 +24,7 @@ export const cartTotalState = selector({
   },
 });
 
+
 export const cartTotalQuantityState = selector({
   key: "cartTotalQuantity",
   get: ({ get }) => {
@@ -33,8 +34,8 @@ export const cartTotalQuantityState = selector({
       totalQuantity += Number(cart[i].quantity);
     }
     return totalQuantity;
-  },
-});
+  }
+})
 
 export const addCart = (cart, product) => {
   const newCart = [...cart];
@@ -53,9 +54,11 @@ export const addCart = (cart, product) => {
 };
 
 export const cartTotal = (cart) => {
+
   let total = 0;
 
   for (let i = 0; i < cart.length; i++) {
+
     let itemTotal = 0;
 
     itemTotal += Number(cart[i].price);
@@ -65,7 +68,8 @@ export const cartTotal = (cart) => {
     }
 
     total += itemTotal * Number(cart[i].quantity);
+
   }
 
   return total;
-};
+}

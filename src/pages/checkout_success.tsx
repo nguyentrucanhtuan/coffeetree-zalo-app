@@ -1,28 +1,13 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Box,
-  Paper,
-  Typography,
-  Divider,
-  Button,
-  ListItem,
-  Card,
-  CardMedia,
-  CardContent,
-  Chip,
-  Stack,
-} from "@mui/material";
+import { Box, Paper, Typography, Divider, Button, ListItem, Card, CardMedia, CardContent, Chip, Stack } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import HomeIcon from "@mui/icons-material/Home";
 import { openChat } from "zmp-sdk/apis";
 import { useRecoilValue } from "recoil";
 import { APILink, folder_image_url } from "../recoil-state/setting";
-import {
-  allProductListState,
-  productById,
-} from "../recoil-state/product-state";
+import { allProductListState, productById } from "../recoil-state/product-state";
 import { cartTotal } from "../recoil-state/cart-state";
 import { Header } from "zmp-ui";
 import { paymentMethodByIdState } from "../recoil-state/payment-state";
@@ -69,38 +54,31 @@ export default function CheckoutSuccessPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ order_id: orderId }),
+      body: JSON.stringify({ order_id: orderId })
+    }).then((response) => {
+      setLoading(false);
+      return response.json();
+    }).then((response) => {
+      setOrderInfo(response[0]);
+      setCartList(JSON.parse(response[0].cart))
     })
-      .then((response) => {
-        setLoading(false);
-        return response.json();
-      })
-      .then((response) => {
-        setOrderInfo(response[0]);
-        setCartList(JSON.parse(response[0].cart));
-      });
   }, []);
 
   const productAllList = useRecoilValue(allProductListState);
 
   const cartTotalPrice = cartTotal(cartList);
 
-  const paymentType = useRecoilValue(
-    paymentMethodByIdState(orderInfo?.payment_id)
-  );
+  const paymentType = useRecoilValue(paymentMethodByIdState(orderInfo?.payment_id));
 
   return (
-    <Box>
+    <Box >
       <Header title="Chi tiết đơn hàng" />
 
       {loading ? (
         <AppLoading />
       ) : (
         <Box sx={{ backgroundColor: "#fff" }}>
-          <Paper
-            elevation={2}
-            sx={{ margin: "10px", marginTop: "50px", padding: "10px" }}
-          >
+          <Paper elevation={2} sx={{ margin: "10px", marginTop: "50px", padding: "10px" }}>
             <Box
               sx={{
                 display: "flex",
@@ -109,9 +87,7 @@ export default function CheckoutSuccessPage() {
                 marginBottom: "8px",
               }}
             >
-              <Typography variant="subtitle2">
-                Thông tin người nhận hàng
-              </Typography>
+              <Typography variant="subtitle2">Thông tin người nhận hàng</Typography>
             </Box>
 
             <Box sx={{ display: "flex" }}>
@@ -126,7 +102,9 @@ export default function CheckoutSuccessPage() {
             <Box sx={{ display: "flex" }}>
               <FmdGoodIcon />
               <Box sx={{ marginLeft: "5px" }}>
-                <Typography variant="caption">{orderInfo?.address}</Typography>
+                <Typography variant="caption">
+                  {orderInfo?.address}
+                </Typography>
               </Box>
             </Box>
           </Paper>
@@ -140,10 +118,8 @@ export default function CheckoutSuccessPage() {
             </Typography>
 
             {cartList?.map((item: any, index) => {
-              const product = productById(
-                productAllList,
-                Number(item.product_id)
-              )[0];
+
+              const product = productById(productAllList, Number(item.product_id))[0];
               let totalTopping = 0;
 
               return (
@@ -173,18 +149,10 @@ export default function CheckoutSuccessPage() {
 
                         <Stack direction="row" spacing={0.3}>
                           {item.addon.map((item: any, i: number) => {
-                            const topping = productById(
-                              productAllList,
-                              Number(item.product_id)
-                            )[0];
+                            const topping = productById(productAllList, Number(item.product_id))[0];
                             totalTopping += Number(topping.price);
                             return (
-                              <Chip
-                                key={i}
-                                size="small"
-                                label={topping.name}
-                                variant="outlined"
-                              />
+                              <Chip key={i} size="small" label={topping.name} variant="outlined" />
                             );
                           })}
                         </Stack>
@@ -194,16 +162,15 @@ export default function CheckoutSuccessPage() {
                           color="text.secondary"
                           component="div"
                         >
-                          {currencyFormat.format(
-                            Number(item.price) + totalTopping
-                          )}
+                          {currencyFormat.format(Number(item.price) + totalTopping)}
                         </Typography>
                       </CardContent>
                     </Box>
                   </Card>
                 </ListItem>
-              );
-            })}
+              )
+            }
+            )}
           </Box>
           <Divider />
           <Box>
@@ -299,7 +266,11 @@ export default function CheckoutSuccessPage() {
           >
             <Box sx={{ display: "flex" }}>
               <Box sx={{ paddingLeft: "10px" }}>
-                <img width="64" height="64" src={chatIcon} />
+                <img
+                  width="64"
+                  height="64"
+                  src={chatIcon}
+                />
               </Box>
               <Box
                 sx={{
@@ -308,16 +279,11 @@ export default function CheckoutSuccessPage() {
                   paddingRight: "10px",
                 }}
               >
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => openChatScreen()}
-                >
+                <Button variant="outlined" fullWidth onClick={() => openChatScreen()}>
                   Chat với hỗ trợ
                 </Button>
                 <Typography sx={{ marginTop: "5px" }} variant="body1">
-                  Nếu bạn có vấn đề về sản phẩm, vận chuyển, trả hàng & hoàn
-                  tiền
+                  Nếu bạn có vấn đề về sản phẩm, vận chuyển, trả hàng & hoàn tiền
                 </Typography>
               </Box>
             </Box>

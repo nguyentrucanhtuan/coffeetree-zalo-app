@@ -8,16 +8,15 @@ export const orderListState = atom({
   default: [],
 });
 
-export const orderListByStatusState = selectorFamily({
-  key: "OrderListByStatus",
-  get:
-    (orderStatus) =>
-    ({ get }) => {
-      const list = get(orderListState);
-      const result = list.filter(function (item) {
-        return item.status == orderStatus;
-      });
 
-      return result;
-    },
-});
+export const orderListByStatusState = selectorFamily({
+  key: 'OrderListByStatus',
+  get: (orderStatus) => ({ get }) => {
+    const list = get(orderListState);
+    const result = list.filter(function (item) {
+      return item.status == orderStatus;
+    });
+
+    return result;
+  }
+})

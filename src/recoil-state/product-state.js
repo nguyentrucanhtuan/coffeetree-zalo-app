@@ -42,7 +42,7 @@ export const productById = (productList, productId) => {
   return productList.filter(function (item) {
     return Number(item.id) == Number(productId);
   });
-};
+}
 
 // export const productByIdState = selectorFamily({
 //   key: "productById",

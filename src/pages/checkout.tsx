@@ -23,6 +23,7 @@ import { useSnackbar } from "zmp-ui";
 
 import cartImage from "../static/cart-image.png";
 
+
 export default function CheckoutPage() {
   const [cartList, setCartList] = useRecoilState(cartState);
   const navigate = useNavigate();
@@ -60,11 +61,13 @@ export default function CheckoutPage() {
   );
 
   const handleCheckOut = async () => {
+
     const APILinkAddOrder = APILink + "/add_customer_order";
 
     const cart: any = [];
 
-    if (addressSelect.phone != "") {
+    if (addressSelect.phone != '') {
+
       for (var i = 0; i < cartList["length"]; i++) {
         const addonList: any = [];
 
@@ -108,6 +111,7 @@ export default function CheckoutPage() {
       setCartList([]);
 
       navigate("/checkout_success/" + res);
+
     } else {
       openSnackbar({
         text: "Vui lòng chọn địa chỉ giao hàng",
@@ -131,7 +135,7 @@ export default function CheckoutPage() {
           >
             Danh sách giỏ hàng
           </Typography>
-
+           
           <ProductCartList />
         </Box>
 
@@ -271,7 +275,10 @@ export default function CheckoutPage() {
             display: "flex",
           }}
         >
-          <img style={{ width: "300px" }} src={cartImage} />
+          <img
+            style={{ width: "300px" }}
+            src={cartImage}
+          />
           <Typography variant="h6">Hổng có gì trong giỏ hết</Typography>
           <Typography variant="subtitle1">
             Lướt CoffeeTree, lựa cà phê ngay đi!

@@ -29,8 +29,7 @@ export default function AddressList(props: any) {
   }
 
   const [addressList, setAddressList] = useRecoilState<any>(addressListState);
-  const [addressSelect, setAddressSelect] =
-    useRecoilState<any>(addressSelectState);
+  const [addressSelect, setAddressSelect] = useRecoilState<any>(addressSelectState);
 
   React.useEffect(() => {
     getStorage({

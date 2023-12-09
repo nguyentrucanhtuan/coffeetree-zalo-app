@@ -1,15 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Box,
-  Paper,
-  Button,
-  Typography,
-  Divider,
-  Drawer,
-  styled,
-  Badge,
-} from "@mui/material";
+import { Box, Paper, Button, Typography, Divider, Drawer, styled, Badge } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { allProductListState } from "../recoil-state/product-state";
 import ProductPicker from "../components/productPicker";
@@ -22,9 +13,9 @@ import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
 
 export default function ProductPage() {
+
   const [openDrawer, setOpenDrawer] = React.useState(false);
-  const [openDrawerAccessPhone, setOpenDrawerAccessPhone] =
-    React.useState(false);
+  const [openDrawerAccessPhone, setOpenDrawerAccessPhone] = React.useState(false);
 
   function toggleDrawer(newOpen: boolean) {
     setOpenDrawer(newOpen);
@@ -33,19 +24,20 @@ export default function ProductPage() {
   const userInfo = useRecoilValue(userInfoState);
 
   const handleClickOrder = () => {
-    if (userInfo.phone == null) {
+
+    if(userInfo.phone == null) {
       setOpenDrawerAccessPhone(true);
     } else {
-      toggleDrawer(true);
+      toggleDrawer(true)
     }
-  };
+  }
 
   let { productId } = useParams();
 
   const allProductList = useRecoilValue(allProductListState);
 
   const currentProduct = allProductList.find(
-    (item) => Number(item.id) === Number(productId)
+    (item) => Number(item.id) === Number(productId),
   );
 
   const currencyFormat = new Intl.NumberFormat("de-DE", {
@@ -57,14 +49,14 @@ export default function ProductPage() {
   const navigate = useNavigate();
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
-    "& .MuiBadge-badge": {
+    '& .MuiBadge-badge': {
       right: 2,
       top: 5,
       border: `2px solid ${theme.palette.background.paper}`,
-      padding: "0 5px",
+      padding: '0 5px',
     },
   }));
-
+  
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
   return (
@@ -96,17 +88,14 @@ export default function ProductPage() {
         elevation={3}
       >
         <Box sx={{ display: "flex" }}>
+
           <Button
             onClick={() => {
-              navigate("/index/checkout");
+              navigate('/index/checkout')
             }}
             variant="outlined"
             size="large"
-            startIcon={
-              <StyledBadge badgeContent={cartQuantity} color="secondary">
-                <ShoppingBasketIcon />
-              </StyledBadge>
-            }
+            startIcon={<StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >}
             sx={{ margin: "5px", width: "100%" }}
           >
             Giỏ hàng
@@ -133,11 +122,8 @@ export default function ProductPage() {
         <ProductPicker product={currentProduct} toggleDrawer={toggleDrawer} />
       </Drawer>
 
-      <DrawerPhoneAccess
-        open={openDrawerAccessPhone}
-        setOpenDrawerAccessPhone={setOpenDrawerAccessPhone}
-        setOpenDrawer={setOpenDrawer}
-      />
+      <DrawerPhoneAccess open={openDrawerAccessPhone} setOpenDrawerAccessPhone={setOpenDrawerAccessPhone} setOpenDrawer={setOpenDrawer}/>
+      
     </>
   );
 }

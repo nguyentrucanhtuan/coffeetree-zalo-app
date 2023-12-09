@@ -14,14 +14,13 @@ export const paymentMethodListState = selector({
   },
 });
 
+
 export const paymentMethodByIdState = selectorFamily({
   key: "paymentMethodById",
-  get:
-    (paymentId) =>
-    ({ get }) => {
-      const paymentList = get(paymentMethodListState);
-      return paymentList.filter(function (item) {
-        return Number(item.id) == Number(paymentId);
-      });
-    },
-});
+  get: (paymentId) => ({ get }) => {
+    const paymentList = get(paymentMethodListState);
+    return paymentList.filter(function (item) {
+      return Number(item.id) == Number(paymentId);
+    });
+  }
+})

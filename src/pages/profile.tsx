@@ -105,7 +105,7 @@ export default function ProfilePage() {
               <Divider /> */}
 
               <ListItem disablePadding>
-                <ListItemButton onClick={() => navigate("/orderList")}>
+                <ListItemButton onClick={() => navigate('/orderList')} >
                   <ListItemIcon>
                     <AccessTimeIcon />
                   </ListItemIcon>
@@ -122,18 +122,22 @@ export default function ProfilePage() {
                   <ListItemIcon>
                     <HelpOutlineIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Sổ địa chỉ" />
+                  <ListItemText
+                    primary="Sổ địa chỉ"
+                  />
                   <NavigateNextIcon />
                 </ListItemButton>
               </ListItem>
               <Divider />
 
               <ListItem disablePadding>
-                <ListItemButton onClick={() => openChatScreen()}>
+                <ListItemButton onClick={() => openChatScreen()} >
                   <ListItemIcon>
                     <DraftsIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Liên hệ và góp ý" />
+                  <ListItemText
+                    primary="Liên hệ và góp ý"
+                  />
                   <NavigateNextIcon />
                 </ListItemButton>
               </ListItem>
