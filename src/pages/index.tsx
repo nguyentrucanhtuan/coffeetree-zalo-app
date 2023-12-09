@@ -94,7 +94,7 @@ const Index = () => {
       <TopBar />
       <Box>
 
-        {/* <Button onClick={()=> {clearData()}}>Clear Data</Button> */}
+        <Button sx={{marginTop: "50px"}} onClick={()=> {clearData()}}>Clear Data</Button>
 
         <Box sx={{ marginBottom: "60px", marginTop: "48px" }}>
           {value == "home" && <HomePage />}

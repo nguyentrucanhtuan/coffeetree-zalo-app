@@ -8,6 +8,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
+import { useRecoilValue } from 'recoil';
+import { collectionPublicListState } from '../recoil-state/collection-state';
 
 export default function TopBar() {
 
@@ -16,6 +18,8 @@ export default function TopBar() {
   function toggleDrawer(newOpen: boolean) {
     setOpenDrawer(newOpen);
   }
+
+  const collectionList = useRecoilValue(collectionPublicListState);
 
   return (
     <>
@@ -41,33 +45,19 @@ export default function TopBar() {
           sx={{width: "250px"}}
         >
           <List>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cà phê" />
-              </ListItemButton>
-            </ListItem>
+
+            {collectionList.map((collection) => (
+              <ListItem disablePadding key={collection.id}>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={collection.name} />
+                </ListItemButton>
+              </ListItem>
+            ))}
             
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Trà" />
-              </ListItemButton>
-            </ListItem>
-
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Máy pha cà phê" />
-              </ListItemButton>
-            </ListItem>
-
+            <Divider />
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>
@@ -76,6 +66,7 @@ export default function TopBar() {
                 <ListItemText primary="Sản phẩm bán chạy" />
               </ListItemButton>
             </ListItem>
+
             <Divider />
             <ListItem disablePadding>
               <ListItemButton>
