@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Badge, Box, Drawer, Typography, styled } from "@mui/material";
+import React from "react";
+import { Badge, Box, styled } from "@mui/material";
 
 import {
   BottomNavigation,
@@ -17,12 +17,12 @@ import HomePage from "./home";
 import CollectionPage from "./collection";
 import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
-import { clearStorage, getPhoneNumber, getStorage, getUserInfo } from "zmp-sdk/apis";
+import { clearStorage, getStorage } from "zmp-sdk/apis";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { CallAndSaveZaloNumber, userInfoState, checkPhoneAccess, saveZaloInfoToCache, getAccessTokenZalo, callFollowOA } from "../recoil-state/userInfo-state";
+import { userInfoState, getAccessTokenZalo } from "../recoil-state/userInfo-state";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
-import { followOA } from "zmp-sdk";
 import { useParams } from "react-router-dom";
+import TopBar from "../components/topBar";
 
 const Index = () => {
   //Hiện popup zalo
@@ -91,11 +91,12 @@ const Index = () => {
   
   return (
     <>
+      <TopBar />
       <Box>
 
-        <Button onClick={()=> {clearData()}}>Clear Data</Button>
+        {/* <Button onClick={()=> {clearData()}}>Clear Data</Button> */}
 
-        <Box sx={{ marginBottom: "60px" }}>
+        <Box sx={{ marginBottom: "60px", marginTop: "48px" }}>
           {value == "home" && <HomePage />}
           {value == "collection" && <CollectionPage />}
           {value == "checkout" && <CheckoutPage />}

@@ -25,7 +25,6 @@ export default function DeliveryInfo() {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
             marginBottom: "8px",
           }}
