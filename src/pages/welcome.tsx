@@ -6,8 +6,11 @@ import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { getStorage, getUserInfo } from "zmp-sdk";
 import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 
-export default function AccessZaloPage() {
+export default function WelcomePage() {
+
+    const navigate = useNavigate();
 
     const [userInfoData, setUserInfoData] = useRecoilState(userInfoState);
 
@@ -45,6 +48,8 @@ export default function AccessZaloPage() {
                 console.log(error);
             }
         });
+
+        navigate("/index/home");
     }
 
     return (

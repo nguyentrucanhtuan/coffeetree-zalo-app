@@ -27,6 +27,7 @@ export const checkPhoneAccess = () => {
 }
 
 export const saveZaloNumberToCache = (phoneNumber) => {
+
   setStorage({
     data: {
       zaloNumber: phoneNumber,

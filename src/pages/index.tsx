@@ -23,11 +23,9 @@ import { userInfoState, getAccessTokenZalo, CallAndSaveZaloNumber } from "../rec
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
 import { useParams } from "react-router-dom";
 import TopBar from "../components/topBar";
-import AccessZaloPage from "./accessZaloPage";
+import WelcomePage from "./welcome";
 
 const Index = () => {
-
-  getAccessTokenZalo();
   
   let { tabValue } = useParams();
 
@@ -91,7 +89,7 @@ const Index = () => {
 
   if (userInfoData.phone == null) {
     return (
-      <AccessZaloPage />
+      <WelcomePage />
     )
   } else {
     return (
