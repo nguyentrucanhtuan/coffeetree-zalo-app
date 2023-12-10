@@ -17,18 +17,18 @@ import HomePage from "./home";
 import CollectionPage from "./collection";
 import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
-import { clearStorage, getStorage } from "zmp-sdk/apis";
+import { clearStorage, getAccessToken, getStorage, getUserInfo } from "zmp-sdk/apis";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userInfoState, getAccessTokenZalo } from "../recoil-state/userInfo-state";
+import { userInfoState, getAccessTokenZalo, CallAndSaveZaloNumber } from "../recoil-state/userInfo-state";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
 import { useParams } from "react-router-dom";
 import TopBar from "../components/topBar";
+import AccessZaloPage from "./accessZaloPage";
 
 const Index = () => {
-  //Hiện popup zalo
-  //callFollowOA();
-  getAccessTokenZalo();
 
+  getAccessTokenZalo();
+  
   let { tabValue } = useParams();
 
   const clearData = async () => {
@@ -38,10 +38,10 @@ const Index = () => {
       console.log(error);
     }
   };
-  
-  let tabDefault = "home"; 
 
-  if(tabValue != null){
+  let tabDefault = "home";
+
+  if (tabValue != null) {
     tabDefault = tabValue;
   }
 
@@ -60,8 +60,8 @@ const Index = () => {
           ...userInfoData,
           phone: zaloNumber,
           idByOA: zaloIdByOA,
-          id : zaloId,
-          name : zaloName,
+          id: zaloId,
+          name: zaloName,
           avatar: zaloAvatar,
         })
 
@@ -88,58 +88,60 @@ const Index = () => {
   }));
 
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
-  
-  return (
-    <>
-      <TopBar />
-      <Box>
 
-        <Button sx={{marginTop: "50px"}} onClick={()=> {clearData()}}>Clear Data</Button>
-
-        <Box sx={{ marginBottom: "60px", marginTop: "48px" }}>
-          {value == "home" && <HomePage />}
-          {value == "collection" && <CollectionPage />}
-          {value == "checkout" && <CheckoutPage />}
-          {value == "profile" && <ProfilePage />}
-        </Box>
-
-        <Paper
-          sx={{ position: "fixed", zIndex: 99, bottom: 0, left: 0, right: 0 }}
-          elevation={3}
-        >
-          <BottomNavigation
-            showLabels
-            value={value}
-            onChange={(event, newValue) =>
-              handleBottomNavigation(event, newValue)
-            }
+  if (userInfoData.phone == null) {
+    return (
+      <AccessZaloPage />
+    )
+  } else {
+    return (
+      <>
+        <TopBar />
+        <Box>
+          <Button sx={{ marginTop: "50px" }} onClick={() => { clearData() }}>Clear Data</Button>
+          <Box sx={{ marginBottom: "60px", marginTop: "48px" }}>
+            {value == "home" && <HomePage />}
+            {value == "collection" && <CollectionPage />}
+            {value == "checkout" && <CheckoutPage />}
+            {value == "profile" && <ProfilePage />}
+          </Box>
+          <Paper
+            sx={{ position: "fixed", zIndex: 99, bottom: 0, left: 0, right: 0 }}
+            elevation={3}
           >
-            <BottomNavigationAction
-              value="home"
-              label="Trang chủ"
-              icon={<HomeIcon />}
-            />
-            <BottomNavigationAction
-              value="collection"
-              label="Danh mục"
-              icon={<AppsIcon />}
-            />
-            <BottomNavigationAction
-              value="checkout"
-              label="Giỏ hàng"
-              icon={<StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >}
-            />
-            <BottomNavigationAction
-              value="profile"
-              label="Cá nhân"
-              icon={<AccountBoxIcon />}
-            />
-          </BottomNavigation>
-        </Paper>
-      </Box>
-
-    </>
-  );
+            <BottomNavigation
+              showLabels
+              value={value}
+              onChange={(event, newValue) =>
+                handleBottomNavigation(event, newValue)
+              }
+            >
+              <BottomNavigationAction
+                value="home"
+                label="Trang chủ"
+                icon={<HomeIcon />}
+              />
+              <BottomNavigationAction
+                value="collection"
+                label="Danh mục"
+                icon={<AppsIcon />}
+              />
+              <BottomNavigationAction
+                value="checkout"
+                label="Giỏ hàng"
+                icon={<StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >}
+              />
+              <BottomNavigationAction
+                value="profile"
+                label="Cá nhân"
+                icon={<AccountBoxIcon />}
+              />
+            </BottomNavigation>
+          </Paper>
+        </Box>
+      </>
+    );
+  }
 };
 
 export default Index;

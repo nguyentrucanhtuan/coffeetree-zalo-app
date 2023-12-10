@@ -12,7 +12,6 @@ export default function DrawerPhoneAccess(props: any) {
     const handleOpenPhoneAccess = () => {
 
         CallAndSaveZaloNumber();
-        //saveZaloNumberToCache("84347479295");
 
         getStorage({
             keys: ["zaloNumber"],

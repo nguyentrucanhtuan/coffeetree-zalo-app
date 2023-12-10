@@ -25,11 +25,13 @@ export default function ProductPage() {
 
   const handleClickOrder = () => {
 
-    if(userInfo.phone == null) {
-      setOpenDrawerAccessPhone(true);
-    } else {
-      toggleDrawer(true)
-    }
+    // if(userInfo.phone == null || userInfo.phone == "") {
+    //   setOpenDrawerAccessPhone(true);
+    // } else {
+    //   toggleDrawer(true)
+    // }
+
+    toggleDrawer(true)
   }
 
   let { productId } = useParams();
@@ -123,7 +125,6 @@ export default function ProductPage() {
       </Drawer>
 
       <DrawerPhoneAccess open={openDrawerAccessPhone} setOpenDrawerAccessPhone={setOpenDrawerAccessPhone} setOpenDrawer={setOpenDrawer}/>
-      
     </>
   );
 }

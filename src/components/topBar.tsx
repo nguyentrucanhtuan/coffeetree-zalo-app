@@ -10,6 +10,7 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { useRecoilValue } from 'recoil';
 import { collectionPublicListState } from '../recoil-state/collection-state';
+import { useNavigate } from 'react-router-dom';
 
 export default function TopBar() {
 
@@ -20,7 +21,7 @@ export default function TopBar() {
   }
 
   const collectionList = useRecoilValue(collectionPublicListState);
-
+  const navigate = useNavigate();
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -48,7 +49,7 @@ export default function TopBar() {
 
             {collectionList.map((collection) => (
               <ListItem disablePadding key={collection.id}>
-                <ListItemButton>
+                <ListItemButton onClick={() => navigate(`/collection/${collection.id}`)}>
                   <ListItemIcon>
                     <InboxIcon />
                   </ListItemIcon>
@@ -59,11 +60,11 @@ export default function TopBar() {
             
             <Divider />
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton >
                 <ListItemIcon>
                   <DraftsIcon />
                 </ListItemIcon>
-                <ListItemText primary="Sản phẩm bán chạy" />
+                <ListItemText primary="Sản Phẩm Bán Chạy" />
               </ListItemButton>
             </ListItem>
 
@@ -73,7 +74,7 @@ export default function TopBar() {
                 <ListItemIcon>
                   <DraftsIcon />
                 </ListItemIcon>
-                <ListItemText primary="Thông tin khuyến mãi" />
+                <ListItemText primary="Sale Khuyến Mãi" />
               </ListItemButton>
             </ListItem>
 
