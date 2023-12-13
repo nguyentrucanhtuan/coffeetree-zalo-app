@@ -59,7 +59,7 @@ export default function TopBar() {
             ))}
             
             <Divider />
-            <ListItem disablePadding>
+            {/* <ListItem disablePadding>
               <ListItemButton >
                 <ListItemIcon>
                   <DraftsIcon />
@@ -76,7 +76,7 @@ export default function TopBar() {
                 </ListItemIcon>
                 <ListItemText primary="Sale Khuyến Mãi" />
               </ListItemButton>
-            </ListItem>
+            </ListItem> */}
 
           </List>
         </Box>

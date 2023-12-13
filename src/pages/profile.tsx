@@ -23,6 +23,8 @@ import AddressList from "../components/addressList";
 
 import { useNavigate } from "react-router";
 import { openChat, followOA } from "zmp-sdk/apis";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "../recoil-state/userInfo-state";
 
 const zaloOAId = "1610121007405920472";
 
@@ -50,6 +52,8 @@ const followZaloOA = async () => {
   }
 };
 
+
+
 export default function ProfilePage() {
   const [openDrawer, setOpenDrawer] = React.useState(false);
 
@@ -58,27 +62,27 @@ export default function ProfilePage() {
   function toggelDrawerAddress(newOpen: boolean) {
     setOpenDrawer(newOpen);
   }
-
+  const userInfoData = useRecoilValue(userInfoState);
   return (
     <>
       <Box>
         <Paper
           elevation={3}
           sx={{
-            margin: "10px",
+            margin: "55px 10px 10px 10px",
             padding: "10px",
             backgroundImage:
               "linear-gradient(to right, #0ba360 0%, #3cba92 100%)",
           }}
         >
           <Box sx={{ display: "flex" }} onClick={() => followZaloOA()}>
-            {/* <Avatar
-                            alt="Nguyễn Trúc Anh Tuấn"
-                            src="https://mui.com/static/images/avatar/1.jpg"
-                            sx={{ width: 56, height: 56 }}
-                        /> */}
+            <Avatar
+              alt={userInfoData.name}
+              src={userInfoData.avatar}
+              sx={{ width: 56, height: 56 }}
+            />
             <Box sx={{ marginLeft: "10px" }}>
-              <Typography variant="h6" sx={{ color: "#fff" }}>
+              <Typography variant="body1" sx={{ color: "#fff" }}>
                 Follow Zalo để đăng ký thành viên
               </Typography>
               <Typography variant="caption" sx={{ color: "#fff" }}>

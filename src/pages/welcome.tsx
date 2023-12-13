@@ -15,14 +15,12 @@ export default function WelcomePage() {
 
         CallAndSaveZaloNumber();
         CallAndSaveZaloNumberPromise().then((phoneZalo)=>{
-            console.log('data ne', phoneZalo)
-
+            //console.log('data ne', phoneZalo)
             setUserInfoData({
                 ...userInfoData,
                 phone: phoneZalo,
             });
 
-            
         });
 
         getUserInfo({
