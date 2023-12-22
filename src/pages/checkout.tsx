@@ -3,6 +3,7 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import {
   Button,
+  Drawer,
   FormControlLabel,
   List,
   Radio,
@@ -20,8 +21,11 @@ import { paymentMethodListState } from "../recoil-state/payment-state";
 import { folder_image_url, APILink } from "../recoil-state/setting";
 import { userInfoState } from "../recoil-state/userInfo-state";
 import { useSnackbar } from "zmp-ui";
+import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
+import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 
 import cartImage from "../static/cart-image.png";
+import VoucherList from "../components/voucherList";
 
 
 export default function CheckoutPage() {
@@ -52,13 +56,12 @@ export default function CheckoutPage() {
   const { openSnackbar, closeSnackbar } = useSnackbar();
 
   const timmerId = React.useRef();
+
   React.useEffect(
     () => () => {
       closeSnackbar();
       clearInterval(timmerId.current);
-    },
-    []
-  );
+    }, []);
 
   const handleCheckOut = async () => {
 
@@ -116,154 +119,200 @@ export default function CheckoutPage() {
       openSnackbar({
         text: "Vui lòng chọn địa chỉ giao hàng",
         type: "warning",
-        position: "top",
+        position: "bottom",
       });
     }
   };
 
+  const [openDrawerVoucher, setOpenDrawerVoucher] = React.useState(false);
+
+  const handleClickVoucher = async () => {
+    setOpenDrawerVoucher(true);
+  }
+
   if (cartList.length > 0)
     return (
-      <Box sx={{ marginBottom: "115px", backgroundColor: "#fff" }}>
-        <DeliveryInfo />
+      <>
+        <Box sx={{ marginBottom: "115px", backgroundColor: "#fff" }}>
+          <DeliveryInfo />
 
-        <Divider style={{ borderWidth: "4px" }} />
+          <Divider style={{ borderWidth: "4px" }} />
 
-        <Box>
-          <Typography
-            variant="subtitle2"
-            sx={{ paddingLeft: "15px", paddingTop: "10px" }}
-          >
-            Danh sách giỏ hàng
-          </Typography>
-           
-          <ProductCartList />
-        </Box>
-
-        <Divider style={{ borderWidth: "4px" }} />
-
-        <Box sx={{ margin: "10px" }}>
-          <Typography
-            variant="subtitle2"
-            sx={{ paddingLeft: "10px", paddingTop: "10px" }}
-          >
-            Phương thức thanh toán
-          </Typography>
-
-          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            <RadioGroup
-              defaultValue={listPaymentMethod[0].id}
-              name="payment-raido-group"
-              onChange={handleChangePayment}
+          <Box>
+            <Typography
+              variant="subtitle2"
+              sx={{ paddingLeft: "15px", paddingTop: "10px" }}
             >
-              {listPaymentMethod.map((payment, index) => {
-                return (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      paddingTop: "10px",
-                      paddingBottom: "10px",
-                    }}
-                  >
-                    <Box sx={{ display: "flex" }}>
-                      <Box sx={{ paddingLeft: "10px" }}>
-                        <img
-                          src={folder_image_url + payment.image}
-                          width="40"
-                          height="40"
+              Danh sách giỏ hàng
+            </Typography>
+
+            <ProductCartList />
+          </Box>
+
+          <Divider style={{ borderWidth: "4px" }} />
+
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+                margin: "10px",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <Typography variant="body1">Tạm tính</Typography>
+              <Typography variant="body1">
+                {currencyFormat.format(cartTotal)}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                margin: "10px",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <Typography variant="body1">Phí vận chuyển</Typography>
+              <Typography variant="body1">
+                {currencyFormat.format(shippingFee)}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                margin: "10px",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <Typography variant="body1">Tổng cộng</Typography>
+              <Typography variant="body1">
+                {currencyFormat.format(cartTotal + shippingFee)}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Divider />
+
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+                margin: "10px",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <Box sx={{ display: "flex" }}>
+                <DiscountOutlinedIcon sx={{ marginRight: "5px" }} />
+                <Typography variant="body1">Khuyến mãi</Typography>
+              </Box>
+
+              <Box sx={{ display: "flex" }} onClick={() => handleClickVoucher()}>
+                <Button variant="outlined">
+                  <Typography variant="body1">
+                    Nhập hoặc chọn mã
+                  </Typography>
+                  <KeyboardArrowRightOutlinedIcon sx={{ marginLeft: "5px" }} />
+                </Button>
+              </Box>
+
+            </Box>
+          </Box>
+
+          <Divider style={{ borderWidth: "4px" }} />
+
+          <Box sx={{ margin: "10px" }}>
+            <Typography
+              variant="subtitle2"
+              sx={{ paddingLeft: "10px", paddingTop: "10px" }}
+            >
+              Phương thức thanh toán
+            </Typography>
+
+            <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+              <RadioGroup
+                defaultValue={listPaymentMethod[0].id}
+                name="payment-raido-group"
+                onChange={handleChangePayment}
+              >
+                {listPaymentMethod.map((payment, index) => {
+                  return (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        paddingTop: "10px",
+                        paddingBottom: "10px",
+                      }}
+                    >
+                      <Box sx={{ display: "flex" }}>
+                        <Box sx={{ paddingLeft: "10px" }}>
+                          <img
+                            src={folder_image_url + payment.image}
+                            width="40"
+                            height="40"
+                          />
+                        </Box>
+                        <Box sx={{ paddingTop: "10px", paddingLeft: "15px" }}>
+                          <Typography variant="subtitle2">
+                            {payment.name}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Box sx={{ paddingRight: "10px" }}>
+                        <FormControlLabel
+                          value={payment.id}
+                          control={<Radio />}
+                          label=""
+                          sx={{ paddingRight: "0px" }}
                         />
                       </Box>
-                      <Box sx={{ paddingTop: "10px", paddingLeft: "15px" }}>
-                        <Typography variant="subtitle2">
-                          {payment.name}
-                        </Typography>
-                      </Box>
                     </Box>
-                    <Box sx={{ paddingRight: "10px" }}>
-                      <FormControlLabel
-                        value={payment.id}
-                        control={<Radio />}
-                        label=""
-                        sx={{ paddingRight: "0px" }}
-                      />
-                    </Box>
-                  </Box>
-                );
-              })}
-            </RadioGroup>
-          </List>
-        </Box>
-
-        <Divider style={{ borderWidth: "4px" }} />
-
-        <Box>
-          <Box
-            sx={{
-              display: "flex",
-              margin: "10px",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "8px",
-            }}
-          >
-            <Typography variant="body1">Tạm tính</Typography>
-            <Typography variant="body1">
-              {currencyFormat.format(cartTotal)}
-            </Typography>
+                  );
+                })}
+              </RadioGroup>
+            </List>
           </Box>
+
           <Box
             sx={{
+              backgroundColor: "#f4f5f6",
+              padding: "8px",
+              position: "fixed",
+              zIndex: 999,
+              bottom: 56,
+              left: 0,
+              right: 0,
               display: "flex",
-              margin: "10px",
               justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "8px",
             }}
           >
-            <Typography variant="body1">Phí vận chuyển</Typography>
-            <Typography variant="body1">
-              {currencyFormat.format(shippingFee)}
+            <Typography sx={{ lineHeight: "36px" }}>
+              Tổng thanh toán: {currencyFormat.format(cartTotal + shippingFee)}
             </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              margin: "10px",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "8px",
-            }}
-          >
-            <Typography variant="body1">Tổng cộng</Typography>
-            <Typography variant="body1">
-              {currencyFormat.format(cartTotal + shippingFee)}
-            </Typography>
+
+            <Button variant="contained" onClick={() => handleCheckOut()}>
+              Đặt hàng
+            </Button>
           </Box>
         </Box>
 
-        <Box
-          sx={{
-            backgroundColor: "#f4f5f6",
-            padding: "8px",
-            position: "fixed",
-            zIndex: 999,
-            bottom: 56,
-            left: 0,
-            right: 0,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
+        <Drawer
+          anchor="bottom"
+          open={openDrawerVoucher}
+          onClose={() => setOpenDrawerVoucher(false)}
         >
-          <Typography sx={{ lineHeight: "36px" }}>
-            Tổng thanh toán: {currencyFormat.format(cartTotal + shippingFee)}
-          </Typography>
+          <VoucherList setOpenDrawerVoucher={setOpenDrawerVoucher} />
+        </Drawer>
 
-          <Button variant="contained" onClick={() => handleCheckOut()}>
-            Đặt hàng
-          </Button>
-        </Box>
-      </Box>
+      </>
     );
   else {
     return (

@@ -87,7 +87,7 @@ const Index = () => {
 
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
-  if (userInfoData.phone == null || userInfoData.phone == "") {
+  if (userInfoData.phone != null || userInfoData.phone == "") {
     return (
       <WelcomePage />
     )
