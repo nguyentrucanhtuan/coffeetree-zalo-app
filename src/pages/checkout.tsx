@@ -26,6 +26,7 @@ import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRig
 
 import cartImage from "../static/cart-image.png";
 import VoucherList from "../components/voucherList";
+import { voucherSelectState } from "../recoil-state/voucher-state";
 
 
 export default function CheckoutPage() {
@@ -130,6 +131,8 @@ export default function CheckoutPage() {
     setOpenDrawerVoucher(true);
   }
 
+  const voucherSelect = useRecoilValue(voucherSelectState);
+
   if (cartList.length > 0)
     return (
       <>
@@ -180,6 +183,21 @@ export default function CheckoutPage() {
                 {currencyFormat.format(shippingFee)}
               </Typography>
             </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                margin: "10px",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <Typography variant="body1">Giảm giá : {voucherSelect.code} </Typography>
+              <Typography variant="body1">
+                {currencyFormat.format(parseInt(voucherSelect.discount))}
+              </Typography>
+            </Box>
             <Box
               sx={{
                 display: "flex",
@@ -216,9 +234,9 @@ export default function CheckoutPage() {
               <Box sx={{ display: "flex" }} onClick={() => handleClickVoucher()}>
                 <Button variant="outlined">
                   <Typography variant="body1">
-                    Nhập hoặc chọn mã
+                     {voucherSelect.code ? voucherSelect.code : "Nhập hoặc chọn mã"}
                   </Typography>
-                  <KeyboardArrowRightOutlinedIcon sx={{ marginLeft: "5px" }} />
+                  
                 </Button>
               </Box>
 
