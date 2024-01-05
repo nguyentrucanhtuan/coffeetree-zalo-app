@@ -133,6 +133,13 @@ export default function CheckoutPage() {
 
   const voucherSelect = useRecoilValue(voucherSelectState);
 
+  let discountTotal = 0;
+  if(voucherSelect.type == "number") {
+    discountTotal = parseInt(voucherSelect.discount);
+  } else {
+    discountTotal = parseInt(voucherSelect.discount)/100 * cartTotal;
+  }
+
   if (cartList.length > 0)
     return (
       <>
@@ -193,9 +200,12 @@ export default function CheckoutPage() {
                 marginBottom: "8px",
               }}
             >
-              <Typography variant="body1">Giảm giá : {voucherSelect.code} </Typography>
               <Typography variant="body1">
-                {currencyFormat.format(parseInt(voucherSelect.discount))}
+                Giảm giá : {voucherSelect.code}
+                {voucherSelect.type == "percent" ?  " (-" + voucherSelect.discount + "%)" : ""} 
+              </Typography>
+              <Typography variant="body1">
+                - {currencyFormat.format(discountTotal)}
               </Typography>
             </Box>
             <Box
@@ -209,7 +219,7 @@ export default function CheckoutPage() {
             >
               <Typography variant="body1">Tổng cộng</Typography>
               <Typography variant="body1">
-                {currencyFormat.format(cartTotal + shippingFee)}
+                {currencyFormat.format(cartTotal + shippingFee - discountTotal)}
               </Typography>
             </Box>
           </Box>

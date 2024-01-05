@@ -127,7 +127,7 @@ export default function productPicker(props: any) {
     openSnackbar({
       text: "Đã thêm vào giỏ hàng",
       type: "success",
-      position: "top",
+      position: "bottom",
       duration: 1000,
     });
   }
