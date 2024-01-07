@@ -5,6 +5,7 @@ import {
   Button,
   Drawer,
   FormControlLabel,
+  IconButton,
   List,
   Radio,
   RadioGroup,
@@ -22,11 +23,12 @@ import { folder_image_url, APILink } from "../recoil-state/setting";
 import { userInfoState } from "../recoil-state/userInfo-state";
 import { useSnackbar } from "zmp-ui";
 import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
-import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 
 import cartImage from "../static/cart-image.png";
 import VoucherList from "../components/voucherList";
 import { voucherSelectState } from "../recoil-state/voucher-state";
+
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 
 
 export default function CheckoutPage() {
@@ -131,13 +133,20 @@ export default function CheckoutPage() {
     setOpenDrawerVoucher(true);
   }
 
-  const voucherSelect = useRecoilValue(voucherSelectState);
+  const [voucherSelect, setVoucherSelect] = useRecoilState<any>(voucherSelectState);
 
   let discountTotal = 0;
-  if(voucherSelect.type == "number") {
+
+  if (voucherSelect.type == "number") {
     discountTotal = parseInt(voucherSelect.discount);
-  } else {
-    discountTotal = parseInt(voucherSelect.discount)/100 * cartTotal;
+  }
+
+  if (voucherSelect.type == "percent") {
+    discountTotal = parseInt(voucherSelect.discount) / 100 * cartTotal;
+  }
+
+  const handleDeletePromotion = () => {
+    setVoucherSelect([]);
   }
 
   if (cartList.length > 0)
@@ -191,23 +200,30 @@ export default function CheckoutPage() {
               </Typography>
             </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                margin: "10px",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "8px",
-              }}
-            >
-              <Typography variant="body1">
-                Giảm giá : {voucherSelect.code}
-                {voucherSelect.type == "percent" ?  " (-" + voucherSelect.discount + "%)" : ""} 
-              </Typography>
-              <Typography variant="body1">
-                - {currencyFormat.format(discountTotal)}
-              </Typography>
-            </Box>
+            {
+              discountTotal > 0 &&
+              <Box
+                sx={{
+                  display: "flex",
+                  margin: "10px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "8px",
+                }}
+              >
+                <Typography variant="body1">
+                  Giảm giá : {voucherSelect.code}
+                  {voucherSelect.type == "percent" ? " (-" + voucherSelect.discount + "%)" : ""}
+                  <IconButton aria-label="delete" size="small" onClick={() => handleDeletePromotion()}>
+                    <HighlightOffOutlinedIcon fontSize="inherit" />
+                  </IconButton>
+                </Typography>
+                <Typography variant="body1">
+                  - {currencyFormat.format(discountTotal)}
+                </Typography>
+              </Box>
+            }
+
             <Box
               sx={{
                 display: "flex",
@@ -244,9 +260,9 @@ export default function CheckoutPage() {
               <Box sx={{ display: "flex" }} onClick={() => handleClickVoucher()}>
                 <Button variant="outlined">
                   <Typography variant="body1">
-                     {voucherSelect.code ? voucherSelect.code : "Nhập hoặc chọn mã"}
+                    {voucherSelect.code ? voucherSelect.code : "Nhập hoặc chọn mã"}
                   </Typography>
-                  
+
                 </Button>
               </Box>
 
