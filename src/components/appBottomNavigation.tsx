@@ -14,7 +14,7 @@ export default function AppBottomNavigation() {
 
   const navigate = useNavigate();
 
-  console.log(value);
+  //console.log(value);
 
   return (
     <Paper

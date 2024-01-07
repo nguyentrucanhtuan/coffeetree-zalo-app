@@ -4,8 +4,11 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { voucherSelectState } from "../recoil-state/voucher-state";
 import { promotionPublicListState } from "../recoil-state/promotion-state";
 import { useSnackbar } from "zmp-ui";
+import { cartTotalQuantityState, cartTotalState } from "../recoil-state/cart-state";
 
 export default function VoucherList(props: any) {
+  const cartTotal = useRecoilValue(cartTotalState);
+  const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
   const [voucherSelect, setVoucherSelect] = useRecoilState<any>(voucherSelectState);
 
@@ -21,30 +24,44 @@ export default function VoucherList(props: any) {
     
   const handleApplyVoucher = (voucherCode: any) => {
 
+    
+    //tạo điều kiện đúng
+    if(cartTotal >= parseInt(voucherCode.minimum_total) && cartQuantity >= parseInt(voucherCode.minimum_quantity)) {
+
+      setVoucherSelect({
+        code: voucherCode.code,
+        type: voucherCode.type,
+        discount: voucherCode.discount,
+      });
+  
+      openSnackbar({
+        text: "Thêm mã giảm giá thành công",
+        type: "success",
+        position: "bottom",
+        duration: 100000,
+      });
+  
+      props.setOpenDrawerVoucher(false);
+  
+    } else {
+
+      openSnackbar({
+        text: "Thêm mã giảm giá không thành công",
+        type: "warning",
+        position: "bottom",
+        duration: 100000,
+        zIndex: 99
+      });
+    }
 
     console.log(voucherCode);
-    
-    setVoucherSelect({
-      code: voucherCode.code,
-      type: voucherCode.type,
-      discount: voucherCode.discount
-    });
-
-    props.setOpenDrawerVoucher(false);
-
-    openSnackbar({
-      text: "Thêm mã giảm giá thành công",
-      type: "success",
-      position: "bottom",
-      duration: 100000,
-    });
+  
   }
 
   const promotionList = useRecoilValue(promotionPublicListState);
 
   return (
     <Box>
-
       {promotionList.map((promotion) => (
         <Paper key={promotion.id} elevation={3} sx={{ margin: "10px", padding: "10px" }}>
           <Box
@@ -56,8 +73,8 @@ export default function VoucherList(props: any) {
             }}
           >
             <Box sx={{ display: "flex" }}>
-              <Box sx={{ marginRight: "20px" }}>
-                <img src="https://images.bloggiamgia.vn/full//07-07-2022/Ellipse-16-1657165581865.png" />
+              <Box sx={{ marginRight: "10px" }}>
+                <img style={{width: "60px"}} src="https://images.bloggiamgia.vn/full//07-07-2022/Ellipse-16-1657165581865.png" />
               </Box>
 
               <Box>
@@ -68,7 +85,11 @@ export default function VoucherList(props: any) {
             </Box>
 
             <Box sx={{ marginLeft: "20px" }}>
-              <Button variant="contained" size="small" onClick={() => { handleApplyVoucher(promotion) }}>Áp dụng</Button>
+              { 
+                cartTotal >= parseInt(promotion.minimum_total) && cartQuantity >= parseInt(promotion.minimum_quantity)
+                ? <Button variant="contained" size="small" onClick={() => { handleApplyVoucher(promotion) }}>Áp dụng</Button>
+                : <Button disabled variant="contained" size="small">Áp dụng</Button>
+              }
             </Box>
           </Box>
         </Paper>
