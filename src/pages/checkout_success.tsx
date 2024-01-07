@@ -202,6 +202,22 @@ export default function CheckoutSuccessPage() {
                 {currencyFormat.format(25000)}
               </Typography>
             </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                margin: "10px",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <Typography variant="body1">Khuyến Mãi</Typography>
+              <Typography variant="body1">
+                - {currencyFormat.format(orderInfo?.discount)}
+              </Typography>
+            </Box>
+
             <Box
               sx={{
                 display: "flex",
@@ -213,7 +229,7 @@ export default function CheckoutSuccessPage() {
             >
               <Typography variant="body1">Tổng cộng</Typography>
               <Typography variant="body1">
-                {currencyFormat.format(cartTotalPrice + 25000)}
+                {currencyFormat.format(cartTotalPrice + 25000 - orderInfo?.discount)}
               </Typography>
             </Box>
           </Box>

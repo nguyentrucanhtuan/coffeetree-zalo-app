@@ -99,6 +99,8 @@ export default function CheckoutPage() {
         address: addressSelect.address,
         zalo_number: userInfoData.phone,
         shipping_price: shippingFee,
+        promotion_code: voucherSelect.code, 
+        discount: discountTotal,
         cart: JSON.stringify(cart),
         payment_id: paymentId,
         note: "ghi chú đơn hàng",
