@@ -77,10 +77,23 @@ export const cartTotal = (cart) => {
 export const cartDiscountState = selector({
   key: "cartDiscount",
   get: ({ get }) => {
+
     const cart = get(cartState);
     const promotion = get(voucherSelectState);
     let total = 0;
-    
-    return promotion.code;
+
+    for (let i = 0; i < cart.length; i++) {
+      if (promotion.limit_collection == cart[i].collection_id || promotion.limit_collection == 0) {
+
+        let subTotal = 0;
+        subTotal += Number(cart[i].price);
+        for (let x = 0; x < cart[i]["addTopping"].length; x++) {
+          subTotal += Number(cart[i]["addTopping"][x]["price"]);
+        }
+        total += subTotal * Number(cart[i].quantity);
+      }
+    }
+
+    return total;
   },
 });

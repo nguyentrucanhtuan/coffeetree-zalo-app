@@ -32,6 +32,7 @@ export default function VoucherList(props: any) {
         code: voucherCode.code,
         type: voucherCode.type,
         discount: voucherCode.discount,
+        limit_collection: voucherCode.limit_collection
       });
   
       openSnackbar({

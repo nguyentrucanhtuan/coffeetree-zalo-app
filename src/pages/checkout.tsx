@@ -33,6 +33,7 @@ import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 export default function CheckoutPage() {
   const [cartList, setCartList] = useRecoilState(cartState);
 
+  console.log(cartList);
 
   const cartDiscount = useRecoilValue(cartDiscountState);
   console.log(cartDiscount);
