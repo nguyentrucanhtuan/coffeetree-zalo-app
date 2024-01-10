@@ -1,4 +1,5 @@
 import { atom, selector } from "recoil";
+import { voucherSelectState } from "./voucher-state";
 
 export const cartState = atom({
   key: "cart",
@@ -23,7 +24,6 @@ export const cartTotalState = selector({
     return total;
   },
 });
-
 
 export const cartTotalQuantityState = selector({
   key: "cartTotalQuantity",
@@ -73,3 +73,14 @@ export const cartTotal = (cart) => {
 
   return total;
 }
+
+export const cartDiscountState = selector({
+  key: "cartDiscount",
+  get: ({ get }) => {
+    const cart = get(cartState);
+    const promotion = get(voucherSelectState);
+    let total = 0;
+    
+    return promotion.code;
+  },
+});

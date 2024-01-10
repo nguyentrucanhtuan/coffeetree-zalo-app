@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { voucherSelectState } from "../recoil-state/voucher-state";
 import { promotionPublicListState } from "../recoil-state/promotion-state";
 import { useSnackbar } from "zmp-ui";
-import { cartTotalQuantityState, cartTotalState } from "../recoil-state/cart-state";
+import { cartState, cartTotalQuantityState, cartTotalState } from "../recoil-state/cart-state";
 
 export default function VoucherList(props: any) {
   const cartTotal = useRecoilValue(cartTotalState);
@@ -21,13 +21,13 @@ export default function VoucherList(props: any) {
       closeSnackbar();
       clearInterval(timmerId.current);
     }, []);
-    
+        
   const handleApplyVoucher = (voucherCode: any) => {
 
-    
     //tạo điều kiện đúng
     if(cartTotal >= parseInt(voucherCode.minimum_total) && cartQuantity >= parseInt(voucherCode.minimum_quantity)) {
 
+      //console.log()
       setVoucherSelect({
         code: voucherCode.code,
         type: voucherCode.type,

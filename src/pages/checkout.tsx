@@ -15,7 +15,7 @@ import {
 import ProductCartList from "../components/productCartList";
 import DeliveryInfo from "../components/deliveryInfo";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { cartState, cartTotalState } from "../recoil-state/cart-state";
+import { cartDiscountState, cartState, cartTotalState } from "../recoil-state/cart-state";
 import { useNavigate } from "react-router";
 import { addressSelectState } from "../recoil-state/address-state";
 import { paymentMethodListState } from "../recoil-state/payment-state";
@@ -30,9 +30,13 @@ import { voucherSelectState } from "../recoil-state/voucher-state";
 
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 
-
 export default function CheckoutPage() {
   const [cartList, setCartList] = useRecoilState(cartState);
+
+
+  const cartDiscount = useRecoilValue(cartDiscountState);
+  console.log(cartDiscount);
+
   const navigate = useNavigate();
 
   const cartTotal = useRecoilValue(cartTotalState);
