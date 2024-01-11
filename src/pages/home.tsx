@@ -11,6 +11,7 @@ import { collectionPublicListState } from "../recoil-state/collection-state";
 import { productPublicListState } from "../recoil-state/product-state";
 import { bannerListState } from "../recoil-state/banner-state";
 import { featureListState } from "../recoil-state/feature-state";
+import PostFeatureById from "../components/postFeatureById";
 
 const HomePage = () => {
   const collectionList = useRecoilValue(collectionPublicListState);
@@ -25,6 +26,7 @@ const HomePage = () => {
       <Divider style={{ borderWidth: "4px" }} />
       <FeatureList listFeature={featureList} />
       <Divider style={{ borderWidth: "4px" }} />
+      <PostFeatureById postId={1} />
       <Box sx={{ marginLeft: "10px", marginTop: "10px" }}>
         <Typography variant="h6" gutterBottom>
           Sản phẩm nổi bật
