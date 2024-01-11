@@ -59,16 +59,16 @@ export default function TopBar() {
             ))}
             
             <Divider />
-            {/* <ListItem disablePadding>
-              <ListItemButton >
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate('/post_list')} >
                 <ListItemIcon>
                   <DraftsIcon />
                 </ListItemIcon>
-                <ListItemText primary="Sản Phẩm Bán Chạy" />
+                <ListItemText primary="Công thức pha chế" />
               </ListItemButton>
             </ListItem>
 
-            <Divider />
+            {/* <Divider />
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>

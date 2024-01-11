@@ -94,6 +94,16 @@ export const cartDiscountState = selector({
       }
     }
 
-    return total;
+    let discount = 0;
+
+    if(promotion.type == "percent"){
+      discount = parseInt(promotion.discount) / 100 * total;
+    }
+
+    if(promotion.type == "number"){
+      discount = parseInt(promotion.discount);
+    }
+
+    return discount;
   },
 });

@@ -12,6 +12,8 @@ import CheckoutSuccessPage from "../pages/checkout_success";
 import EditInfoPage from "../pages/edit_info";
 import OrderListPage from "../pages/order_list";
 import AppLoading from "./loading";
+import PostListPage from "../pages/postList";
+import PostPage from "../pages/post";
 
 const MyApp = () => {
   return (
@@ -24,6 +26,8 @@ const MyApp = () => {
                 <Route path="/" element={<Index />}></Route>
                 <Route path="/index/:tabValue" element={<Index />}></Route>
                 <Route path="/collection" element={<CollectionPage />}></Route>
+                <Route path="/post_list" element={<PostListPage />}></Route>
+                <Route path="/post/:postId" element={<PostPage />}></Route>
                 <Route
                   path="/collection/:collectionId"
                   element={<CollectionPage />}

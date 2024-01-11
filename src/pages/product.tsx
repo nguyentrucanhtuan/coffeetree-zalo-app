@@ -80,7 +80,7 @@ export default function ProductPage() {
         <Divider />
         <Box sx={{ padding: "10px" }}>
           <Typography variant="body1" sx={{ textAlign: "justify" }}>
-            {currentProduct?.description}
+            <div dangerouslySetInnerHTML={{__html: currentProduct?.description}} />
           </Typography>
         </Box>
       </Box>
