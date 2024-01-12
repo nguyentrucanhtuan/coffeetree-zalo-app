@@ -113,7 +113,7 @@ export default function CheckoutPage() {
         zalo_number: userInfoData.phone,
         shipping_price: shippingFee,
         promotion_code: voucherSelect.code,
-        discount: discountTotal,
+        discount: cartDiscount,
         cart: JSON.stringify(cart),
         payment_id: paymentId,
         note: "ghi chú đơn hàng",
@@ -150,15 +150,7 @@ export default function CheckoutPage() {
 
   const [voucherSelect, setVoucherSelect] = useRecoilState<any>(voucherSelectState);
 
-  let discountTotal = 0;
-
-  if (voucherSelect.type == "number") {
-    discountTotal = parseInt(voucherSelect.discount);
-  }
-
-  if (voucherSelect.type == "percent") {
-    discountTotal = parseInt(voucherSelect.discount) / 100 * cartTotal;
-  }
+  
 
   const handleDeletePromotion = () => {
     setVoucherSelect([]);
@@ -219,7 +211,7 @@ export default function CheckoutPage() {
             }
 
             {
-              discountTotal > 0 &&
+              cartDiscount > 0 &&
               <Box
                 sx={{
                   display: "flex",
@@ -237,7 +229,7 @@ export default function CheckoutPage() {
                   </IconButton>
                 </Typography>
                 <Typography variant="body1">
-                  - {currencyFormat.format(discountTotal)}
+                  - {currencyFormat.format(cartDiscount)}
                 </Typography>
               </Box>
             }
@@ -253,7 +245,7 @@ export default function CheckoutPage() {
             >
               <Typography variant="body1">Tổng cộng</Typography>
               <Typography variant="body1">
-                {currencyFormat.format(cartTotal + shippingFee - discountTotal)}
+                {currencyFormat.format(cartTotal + shippingFee - cartDiscount)}
               </Typography>
             </Box>
           </Box>

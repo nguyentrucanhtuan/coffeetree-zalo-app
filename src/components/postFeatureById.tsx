@@ -18,7 +18,7 @@ export default function PostFeatureById(props: any) {
     return (
         <>
             <Header title="Công thức pha chế" />
-            <Box sx={{ width: "100%", marginTop: "45px", padding: "10px" }}>
+            <Box sx={{ width: "100%", padding: "10px" }}>
                     <Card 
                         sx={{ marginBottom: "10px" }} 
                         onClick={() => navigate(`/post/${postId}`)}
