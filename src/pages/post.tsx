@@ -19,7 +19,7 @@ export default function PostPage() {
       <Header title="Nội dung bài viết" />
       <Box sx={{ marginBottom: "55px", marginTop: "43px" }}>
         <img
-          src="http://mui.com/static/images/cards/contemplative-reptile.jpg"
+          src={folder_image_url + currentPost.image}
           style={{ width: "100%" }}
         />
         <Box sx={{ padding: "10px" }}>
@@ -32,9 +32,7 @@ export default function PostPage() {
         </Box>
         <Divider />
         <Box sx={{ padding: "10px" }}>
-          <Typography variant="body1" sx={{ textAlign: "justify" }}>
             <div dangerouslySetInnerHTML={{__html: currentPost.content}} />
-          </Typography>
         </Box>
       </Box>
     </>

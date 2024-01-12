@@ -168,7 +168,7 @@ export default function productPicker(props: any) {
           </Box>
         )}
 
-        {listTopping != null && (
+        {listTopping.length > 0  && (
           <Box>
             <Typography>Topping</Typography>
             <FormGroup>

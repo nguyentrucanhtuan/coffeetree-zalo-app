@@ -29,19 +29,27 @@ import VoucherList from "../components/voucherList";
 import { voucherSelectState } from "../recoil-state/voucher-state";
 
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
+import { freeshipMinimumState, settingListState, shippingFeeState } from "../recoil-state/setting-state";
 
 export default function CheckoutPage() {
+
   const [cartList, setCartList] = useRecoilState(cartState);
 
-  console.log(cartList);
+  const freeshipMinimum = useRecoilValue(freeshipMinimumState);
+  const shippingPrice = useRecoilValue(shippingFeeState);
+  console.log('freeshipMinimum', freeshipMinimum);
 
   const cartDiscount = useRecoilValue(cartDiscountState);
-  console.log(cartDiscount);
+  console.log('cartDiscount', cartDiscount);
 
   const navigate = useNavigate();
 
   const cartTotal = useRecoilValue(cartTotalState);
-  const shippingFee = 25000;
+  
+  let shippingFee = 0;
+  if(cartTotal < parseInt(freeshipMinimum)){
+    shippingFee = parseInt(shippingPrice);
+  }
 
   const addressSelect = useRecoilValue(addressSelectState);
 
@@ -104,7 +112,7 @@ export default function CheckoutPage() {
         address: addressSelect.address,
         zalo_number: userInfoData.phone,
         shipping_price: shippingFee,
-        promotion_code: voucherSelect.code, 
+        promotion_code: voucherSelect.code,
         discount: discountTotal,
         cart: JSON.stringify(cart),
         payment_id: paymentId,
@@ -192,20 +200,23 @@ export default function CheckoutPage() {
                 {currencyFormat.format(cartTotal)}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                margin: "10px",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "8px",
-              }}
-            >
-              <Typography variant="body1">Phí vận chuyển</Typography>
-              <Typography variant="body1">
-                {currencyFormat.format(shippingFee)}
-              </Typography>
-            </Box>
+            {
+              cartTotal < parseInt(freeshipMinimum) &&
+              <Box
+                sx={{
+                  display: "flex",
+                  margin: "10px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "8px",
+                }}
+              >
+                <Typography variant="body1">Phí vận chuyển</Typography>
+                <Typography variant="body1">
+                  {currencyFormat.format(shippingFee)}
+                </Typography>
+              </Box>
+            }
 
             {
               discountTotal > 0 &&

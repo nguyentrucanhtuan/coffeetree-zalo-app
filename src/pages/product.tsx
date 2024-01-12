@@ -13,7 +13,6 @@ import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
 
 export default function ProductPage() {
-
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openDrawerAccessPhone, setOpenDrawerAccessPhone] = React.useState(false);
 
@@ -79,9 +78,7 @@ export default function ProductPage() {
         </Box>
         <Divider />
         <Box sx={{ padding: "10px" }}>
-          <Typography variant="body1" sx={{ textAlign: "justify" }}>
             <div dangerouslySetInnerHTML={{__html: currentProduct?.description}} />
-          </Typography>
         </Box>
       </Box>
 

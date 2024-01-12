@@ -4,6 +4,7 @@ import { useRecoilValue } from "recoil";
 import { Header } from "zmp-ui";
 import { postPublicListState } from "../recoil-state/post-state";
 import { useNavigate } from "react-router-dom";
+import { folder_image_url } from "../recoil-state/setting";
 
 export default function PostListPage() {
 
@@ -24,7 +25,7 @@ export default function PostListPage() {
                             <CardMedia
                                 component="img"
                                 height="100%"
-                                image="http://mui.com/static/images/cards/contemplative-reptile.jpg"
+                                image={folder_image_url + post.image}
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
