@@ -96,14 +96,46 @@ export const cartDiscountState = selector({
 
     let discount = 0;
 
-    if(promotion.type == "percent"){
+    if (promotion.type == "percent") {
       discount = parseInt(promotion.discount) / 100 * total;
     }
 
-    if(promotion.type == "number"){
+    if (promotion.type == "number") {
       discount = parseInt(promotion.discount);
     }
 
     return discount;
   },
 });
+
+
+export const cartTotalByCollectionId = (cart, collectionId) => {
+  
+  let total = 0;
+
+  for (let i = 0; i < cart.length; i++) {
+    if (collectionId == cart[i].collection_id || collectionId == 0) {
+
+      let subTotal = 0;
+
+      subTotal = subTotal + Number(cart[i].price);
+      for (let x = 0; x < cart[i]["addTopping"].length; x++) {
+        subTotal = subTotal + Number(cart[i]["addTopping"][x]["price"]);
+      }
+
+      total = total + subTotal * Number(cart[i].quantity);
+    }
+  }
+
+  return total;
+}
+
+export const cartQuantityByCollectionId = (cart, collectionId) => {
+  let totalQuantity = 0;
+    for (let i = 0; i < cart.length; i++) {
+      if (collectionId == cart[i].collection_id || collectionId == 0) {
+        totalQuantity += Number(cart[i].quantity);
+      }
+    }
+    return totalQuantity;
+}

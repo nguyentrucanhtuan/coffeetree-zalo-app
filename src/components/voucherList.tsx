@@ -4,9 +4,10 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { voucherSelectState } from "../recoil-state/voucher-state";
 import { promotionPublicListState } from "../recoil-state/promotion-state";
 import { useSnackbar } from "zmp-ui";
-import { cartState, cartTotalQuantityState, cartTotalState } from "../recoil-state/cart-state";
+import {  cartQuantityByCollectionId, cartState, cartTotalByCollectionId, cartTotalQuantityState, cartTotalState } from "../recoil-state/cart-state";
 
 export default function VoucherList(props: any) {
+  const cartArray = useRecoilValue(cartState);
   const cartTotal = useRecoilValue(cartTotalState);
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
@@ -86,8 +87,8 @@ export default function VoucherList(props: any) {
             </Box>
 
             <Box sx={{ marginLeft: "20px" }}>
-              { 
-                cartTotal >= parseInt(promotion.minimum_total) && cartQuantity >= parseInt(promotion.minimum_quantity)
+              {
+                cartTotalByCollectionId(cartArray, promotion.limit_collection) >= parseInt(promotion.minimum_total) && cartQuantityByCollectionId(cartArray, promotion.limit_collection) >= parseInt(promotion.minimum_quantity)
                 ? <Button variant="contained" size="small" onClick={() => { handleApplyVoucher(promotion) }}>Áp dụng</Button>
                 : <Button disabled variant="contained" size="small">Áp dụng</Button>
               }
