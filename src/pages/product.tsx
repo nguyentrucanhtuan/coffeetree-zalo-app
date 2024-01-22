@@ -1,21 +1,23 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Paper, Button, Typography, Divider, Drawer, styled, Badge } from "@mui/material";
+import { Box, Paper, Button, Typography, Divider, Drawer, styled, Badge, IconButton } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { allProductListState } from "../recoil-state/product-state";
 import ProductPicker from "../components/productPicker";
 import { Header } from "zmp-ui";
-import { folder_image_url } from "../recoil-state/setting";
-import { getStorage } from "zmp-sdk";
+import { folder_image_url, zaloChatUserId } from "../recoil-state/setting";
+import { getStorage, openChat } from "zmp-sdk";
 import { userInfoState } from "../recoil-state/userInfo-state";
 import DrawerPhoneAccess from "../components/drawerPhoneAcess";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
+import ChatIcon from '@mui/icons-material/Chat';
+const zaloOAId = "1610121007405920472";
 
 export default function ProductPage() {
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openDrawerAccessPhone, setOpenDrawerAccessPhone] = React.useState(false);
-
+  
   function toggleDrawer(newOpen: boolean) {
     setOpenDrawer(newOpen);
   }
@@ -47,11 +49,21 @@ export default function ProductPage() {
     maximumFractionDigits: 0,
   });
 
+  const openChatScreen =()=> {
+    openChat({
+      type: 'user',
+      id: zaloChatUserId,
+      message: 'Xin Chào, tôi muốn hỏi về sản phẩm ' + currentProduct?.name,
+      success: () => {},
+      fail: (err) => {}
+    });
+  }
+
   const navigate = useNavigate();
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
-      right: 2,
+      right: -2,
       top: 5,
       border: `2px solid ${theme.palette.background.paper}`,
       padding: '0 5px',
@@ -88,17 +100,40 @@ export default function ProductPage() {
       >
         <Box sx={{ display: "flex" }}>
 
-          <Button
+          {/* <Button
             onClick={() => {
               navigate('/index/checkout')
             }}
             variant="outlined"
             size="large"
             startIcon={<StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >}
-            sx={{ margin: "5px", width: "100%" }}
-          >
-            Giỏ hàng
-          </Button>
+            sx={{ margin: "5px"}}
+          ></Button> */}
+
+          <IconButton 
+              color="primary" 
+              onClick={() => {navigate('/index/checkout')}} 
+              style={{
+                padding: "5px 22px 5px 22px",
+                borderRadius: "5px",
+                border: "1px solid rgba(25, 118, 210, 0.5)",
+                margin: "5px 5px 5px 5px",
+              }}>
+            <StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >
+          </IconButton>
+
+          <IconButton 
+          onClick={() => openChatScreen()} 
+          color="primary" 
+          style={{
+                padding: "5px 22px 5px 22px",
+                borderRadius: "5px",
+                border: "1px solid rgba(25, 118, 210, 0.5)",
+                margin: "5px 0px 5px 0px",
+              }}>
+            <ChatIcon />
+          </IconButton>
+          
           <Button
             onClick={() => {
               handleClickOrder();

@@ -1,6 +1,7 @@
 export const APILink = "https://order.coffeetree.vn/api";
 export const folder_image_url = "https://order.coffeetree.vn/storage/";
 export const zaloOAId = "1610121007405920472";
+export const zaloChatUserId = "379304519624975643";
 
 export const currencyFormat = new Intl.NumberFormat("de-DE", {
     style: "decimal",

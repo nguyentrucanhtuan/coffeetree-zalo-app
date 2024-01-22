@@ -17,7 +17,7 @@ import HomePage from "./home";
 import CollectionPage from "./collection";
 import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
-import { clearStorage, getAccessToken, getStorage, getUserInfo } from "zmp-sdk/apis";
+import { clearStorage, getAccessToken, getStorage, getUserID, getUserInfo } from "zmp-sdk/apis";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfoState, getAccessTokenZalo, CallAndSaveZaloNumber } from "../recoil-state/userInfo-state";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
@@ -87,7 +87,31 @@ const Index = () => {
 
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
-  if (userInfoData.phone != null || userInfoData.phone == "") {
+
+  getAccessToken({
+    success: (accessToken) => {
+      // xử lý khi gọi api thành công
+      console.log('accessToken', accessToken)
+    },
+    fail: (error) => {
+      // xử lý khi gọi api thất bại
+      console.log(error);
+    }
+  });
+
+  getUserInfo({
+    success: (data) => {
+      // xử lý khi gọi api thành công
+      const { userInfo } = data;
+      console.log('userInfo', userInfo)
+    },
+    fail: (error) => {
+      // xử lý khi gọi api thất bại
+      console.log(error);
+    }
+  });
+
+  if (userInfoData.phone == null || userInfoData.phone == "") {
     return (
       <WelcomePage />
     )

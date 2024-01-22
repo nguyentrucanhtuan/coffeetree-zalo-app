@@ -6,7 +6,7 @@ import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import HomeIcon from "@mui/icons-material/Home";
 import { openChat } from "zmp-sdk/apis";
 import { useRecoilValue } from "recoil";
-import { APILink, folder_image_url } from "../recoil-state/setting";
+import { APILink, folder_image_url, zaloChatUserId } from "../recoil-state/setting";
 import { allProductListState, productById } from "../recoil-state/product-state";
 import { cartTotal } from "../recoil-state/cart-state";
 import { Header } from "zmp-ui";
@@ -33,8 +33,8 @@ export default function CheckoutSuccessPage() {
   const openChatScreen = async () => {
     try {
       await openChat({
-        type: "oa",
-        id: zaloOAId,
+        type: "user",
+        id: zaloChatUserId,
         message: "Xin Chào, Tôi muốn hỏi về đơn hàng A00" + orderId,
       });
     } catch (error) {
@@ -63,6 +63,8 @@ export default function CheckoutSuccessPage() {
       setCartList(JSON.parse(response[0].cart))
     })
   }, []);
+
+  console.log('orderInfo', orderInfo);
 
   const productAllList = useRecoilValue(allProductListState);
 
@@ -199,7 +201,7 @@ export default function CheckoutSuccessPage() {
             >
               <Typography variant="body1">Phí vận chuyển</Typography>
               <Typography variant="body1">
-                {currencyFormat.format(25000)}
+                {currencyFormat.format(parseInt(orderInfo?.shipping_price))}
               </Typography>
             </Box>
 
@@ -212,7 +214,7 @@ export default function CheckoutSuccessPage() {
                 marginBottom: "8px",
               }}
             >
-              <Typography variant="body1">Khuyến Mãi</Typography>
+              <Typography variant="body1">Khuyến Mãi: {orderInfo?.promotion_code}</Typography>
               <Typography variant="body1">
                 - {currencyFormat.format(orderInfo?.discount)}
               </Typography>
@@ -229,7 +231,7 @@ export default function CheckoutSuccessPage() {
             >
               <Typography variant="body1">Tổng cộng</Typography>
               <Typography variant="body1">
-                {currencyFormat.format(cartTotalPrice + 25000 - orderInfo?.discount)}
+                {currencyFormat.format(cartTotalPrice + parseInt(orderInfo?.shipping_price) - orderInfo?.discount)}
               </Typography>
             </Box>
           </Box>

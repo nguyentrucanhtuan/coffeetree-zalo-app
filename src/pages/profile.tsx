@@ -25,14 +25,15 @@ import { useNavigate } from "react-router";
 import { openChat, followOA } from "zmp-sdk/apis";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "../recoil-state/userInfo-state";
+import { zaloChatUserId } from "../recoil-state/setting";
 
 const zaloOAId = "1610121007405920472";
 
 const openChatScreen = async () => {
   try {
     await openChat({
-      type: "oa",
-      id: zaloOAId,
+      type: "user",
+      id: zaloChatUserId,
       message: "Xin Chào, tôi muốn hỏi",
     });
   } catch (error) {
@@ -140,7 +141,7 @@ export default function ProfilePage() {
                     <DraftsIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Liên hệ và góp ý"
+                    primary="Nhắn tin cho CoffeeTree"
                   />
                   <NavigateNextIcon />
                 </ListItemButton>

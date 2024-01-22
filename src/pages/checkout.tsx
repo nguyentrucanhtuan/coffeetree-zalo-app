@@ -33,17 +33,12 @@ import { freeshipMinimumState, settingListState, shippingFeeState } from "../rec
 
 export default function CheckoutPage() {
 
-  const [cartList, setCartList] = useRecoilState(cartState);
-
-  const freeshipMinimum = useRecoilValue(freeshipMinimumState);
-  const shippingPrice = useRecoilValue(shippingFeeState);
-  console.log('freeshipMinimum', freeshipMinimum);
-
-  const cartDiscount = useRecoilValue(cartDiscountState);
-  console.log('cartDiscount', cartDiscount);
-
   const navigate = useNavigate();
 
+  const [cartList, setCartList] = useRecoilState(cartState);
+  const freeshipMinimum = useRecoilValue(freeshipMinimumState);
+  const shippingPrice = useRecoilValue(shippingFeeState);
+  const cartDiscount = useRecoilValue(cartDiscountState);
   const cartTotal = useRecoilValue(cartTotalState);
   
   let shippingFee = 0;
@@ -117,6 +112,11 @@ export default function CheckoutPage() {
         cart: JSON.stringify(cart),
         payment_id: paymentId,
         note: "ghi chú đơn hàng",
+        zalo_userId : userInfoData.id,
+        zalo_name: userInfoData.name,
+        zalo_idByOA: userInfoData.idByOA,
+        zalo_avatar: userInfoData.avatar,
+        zalo_gender: userInfoData.gender,
       };
 
       const response = await fetch(APILinkAddOrder, {
@@ -222,7 +222,7 @@ export default function CheckoutPage() {
                 }}
               >
                 <Typography variant="body1">
-                  Giảm giá : {voucherSelect.code}
+                  Giảm giá: {voucherSelect.code}
                   {voucherSelect.type == "percent" ? " (-" + voucherSelect.discount + "%)" : ""}
                   <IconButton aria-label="delete" size="small" onClick={() => handleDeletePromotion()}>
                     <HighlightOffOutlinedIcon fontSize="inherit" />
