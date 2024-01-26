@@ -24,7 +24,7 @@ const MyApp = () => {
             <ZMPRouter>
               <AnimationRoutes>
                 <Route path="/" element={<Index />}></Route>
-                <Route path="/index/:tabValue" element={<Index />}></Route>
+                <Route path="/index/:tabParam" element={<Index />}></Route>
                 <Route path="/collection" element={<CollectionPage />}></Route>
                 <Route path="/post_list" element={<PostListPage />}></Route>
                 <Route path="/post/:postId" element={<PostPage />}></Route>

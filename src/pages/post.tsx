@@ -43,9 +43,12 @@ export default function PostPage() {
           <Typography variant="h5" sx={{ marginBottom: "10px" }}>
             {currentPost.name}
           </Typography>
-          <Typography variant="h6">
+          {/* <Typography variant="h6">
             {currentPost.description}
-          </Typography>
+          </Typography> */}
+          <Box> 
+            <div dangerouslySetInnerHTML={{__html: currentPost.description}} />
+          </Box>
         </Box>
         <Divider />
         <Box sx={{ padding: "10px" }}>

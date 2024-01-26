@@ -19,15 +19,16 @@ import CheckoutPage from "./checkout";
 import ProfilePage from "./profile";
 import { clearStorage, getAccessToken, getStorage, getUserID, getUserInfo } from "zmp-sdk/apis";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userInfoState, getAccessTokenZalo, CallAndSaveZaloNumber } from "../recoil-state/userInfo-state";
+import { userInfoState, saveZaloInfoToCache } from "../recoil-state/userInfo-state";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
 import { useParams } from "react-router-dom";
 import TopBar from "../components/topBar";
-import WelcomePage from "./welcome";
+import DrawerPhoneAccess from "../components/drawerPhoneAccess";
 
 const Index = () => {
-  
-  let { tabValue } = useParams();
+
+  const [openDrawerAccessPhone, setOpenDrawerAccessPhone] = React.useState(false);
+  let { tabParam } = useParams();
 
   const clearData = async () => {
     try {
@@ -38,42 +39,79 @@ const Index = () => {
   };
 
   let tabDefault = "home";
-
-  if (tabValue != null) {
-    tabDefault = tabValue;
+  if (tabParam != null) {
+    tabDefault = tabParam;
   }
 
-  const [value, setValue] = React.useState(tabDefault);
-
+  const [tab, setTab] = React.useState(tabDefault);
+  const [tabRedirect, setTabRedirect] = React.useState();
   const [userInfoData, setUserInfoData] = useRecoilState(userInfoState);
 
+  const [zaloLogin, setZaloLogin] = React.useState(false);
+
   React.useEffect(() => {
+    
     getStorage({
-      keys: ["zaloNumber", "zaloIdByOA", "zaloId", "zaloName", "zaloAvatar"],
+      keys: ["zaloNumber"],
       success: (data) => {
         // xử lý khi gọi api thành công
-        const { zaloNumber, zaloIdByOA, zaloId, zaloName, zaloAvatar } = data;
+        const { zaloNumber } = data;
 
         setUserInfoData({
           ...userInfoData,
-          phone: zaloNumber,
-          idByOA: zaloIdByOA,
-          id: zaloId,
-          name: zaloName,
-          avatar: zaloAvatar,
+          phone: zaloNumber
         })
-
-        console.log("zalo cache", data)
+        
+        if(zaloNumber != null && zaloNumber != ""){
+          setZaloLogin(true);
+        }
+        
       },
       fail: (error) => {
         // xử lý khi gọi api thất bại
         console.log(error);
       }
     });
-  }, []);
+    
+    console.log('userInfoData.phone', userInfoData.phone);
+    console.log('zaloLogin', zaloLogin);
 
-  const handleBottomNavigation = (event: any, newValue: any) => {
-    setValue(newValue);
+    getAccessToken({
+      success: (accessToken) => {
+        // xử lý khi gọi api thành công
+        getUserInfo({
+          success: (data) => {
+            const { userInfo } = data;
+            setUserInfoData({
+              ...userInfoData,
+              id: userInfoData.id,
+              name: userInfoData.name,
+              avatar: userInfoData.avatar,
+              idByOA: userInfoData.idByOA
+            })
+            //console.log('getUserInfo', userInfo);
+            saveZaloInfoToCache(userInfo.id, userInfo.idByOA, userInfo.name, userInfo.avatar)
+          },
+          fail: (error) => {
+            console.log(error);
+          }
+        });
+      },
+      fail: (error) => {
+        // xử lý khi gọi api thất bại
+        console.log(error);
+      }
+    });
+
+  }, [zaloLogin]);
+
+  const handleBottomNavigation = (event: any, newTab: any) => {
+    if((newTab == "checkout" || newTab == "profile") && zaloLogin == false) {
+      setTabRedirect(newTab);
+      setOpenDrawerAccessPhone(true);
+    } else {
+      setTab(newTab);
+    }
   };
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -87,83 +125,63 @@ const Index = () => {
 
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
-
-  getAccessToken({
-    success: (accessToken) => {
-      // xử lý khi gọi api thành công
-      console.log('accessToken', accessToken)
-    },
-    fail: (error) => {
-      // xử lý khi gọi api thất bại
-      console.log(error);
-    }
-  });
-
-  getUserInfo({
-    success: (data) => {
-      // xử lý khi gọi api thành công
-      const { userInfo } = data;
-      console.log('userInfo', userInfo)
-    },
-    fail: (error) => {
-      // xử lý khi gọi api thất bại
-      console.log(error);
-    }
-  });
-
-  if (userInfoData.phone == null || userInfoData.phone == "") {
-    return (
-      <WelcomePage />
-    )
-  } else {
-    return (
-      <>
-        <TopBar />
-        <Box>
-          {/* <Button sx={{ marginTop: "50px" }} onClick={() => { clearData() }}>Clear Data</Button> */}
-          <Box sx={{ marginBottom: "60px", marginTop: "48px" }}>
-            {value == "home" && <HomePage />}
-            {value == "collection" && <CollectionPage />}
-            {value == "checkout" && <CheckoutPage />}
-            {value == "profile" && <ProfilePage />}
-          </Box>
-          <Paper
-            sx={{ position: "fixed", zIndex: 99, bottom: 0, left: 0, right: 0 }}
-            elevation={3}
-          >
-            <BottomNavigation
-              showLabels
-              value={value}
-              onChange={(event, newValue) =>
-                handleBottomNavigation(event, newValue)
-              }
-            >
-              <BottomNavigationAction
-                value="home"
-                label="Trang chủ"
-                icon={<HomeIcon />}
-              />
-              <BottomNavigationAction
-                value="collection"
-                label="Danh mục"
-                icon={<AppsIcon />}
-              />
-              <BottomNavigationAction
-                value="checkout"
-                label="Giỏ hàng"
-                icon={<StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >}
-              />
-              <BottomNavigationAction
-                value="profile"
-                label="Cá nhân"
-                icon={<AccountBoxIcon />}
-              />
-            </BottomNavigation>
-          </Paper>
+  return (
+    <>
+      <TopBar />
+      <Box>
+        {/* <Button sx={{ marginTop: "50px" }} onClick={() => { clearData() }}>Clear Data</Button> */}
+        <Box sx={{ marginBottom: "60px", marginTop: "48px" }}>
+          {tab == "home" && <HomePage />}
+          {tab == "collection" && <CollectionPage />}
+          {tab == "checkout" && <CheckoutPage />}
+          {tab == "profile" && <ProfilePage />}
         </Box>
-      </>
-    );
-  }
+        <Paper
+          sx={{ position: "fixed", zIndex: 99, bottom: 0, left: 0, right: 0 }}
+          elevation={3}
+        >
+          <BottomNavigation
+            showLabels
+            value={tab}
+            onChange={(event, newTab) =>
+              handleBottomNavigation(event, newTab)
+            }
+          >
+            <BottomNavigationAction
+              value="home"
+              label="Trang chủ"
+              icon={<HomeIcon />}
+            />
+            <BottomNavigationAction
+              value="collection"
+              label="Danh mục"
+              icon={<AppsIcon />}
+            />
+            <BottomNavigationAction
+              value="checkout"
+              label="Giỏ hàng"
+              icon={<StyledBadge badgeContent={cartQuantity} color="secondary"><ShoppingBasketIcon /></StyledBadge >}
+            />
+            <BottomNavigationAction
+              value="profile"
+              label="Cá nhân"
+              icon={<AccountBoxIcon />}
+            />
+          </BottomNavigation>
+        </Paper>
+      </Box>
+
+      <DrawerPhoneAccess 
+        open={openDrawerAccessPhone} 
+        setOpenDrawerAccessPhone={setOpenDrawerAccessPhone} 
+        //setOpenDrawer={setOpenDrawer}
+        setZaloLogin={setZaloLogin}
+        setTab={setTab}
+        tabRedirect={tabRedirect}
+      />
+    </>
+  );
+
 };
 
 export default Index;

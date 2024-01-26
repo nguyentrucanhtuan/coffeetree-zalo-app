@@ -150,8 +150,6 @@ export default function CheckoutPage() {
 
   const [voucherSelect, setVoucherSelect] = useRecoilState<any>(voucherSelectState);
 
-  
-
   const handleDeletePromotion = () => {
     setVoucherSelect([]);
   }
@@ -349,7 +347,7 @@ export default function CheckoutPage() {
             }}
           >
             <Typography sx={{ lineHeight: "36px" }}>
-              Tổng thanh toán: {currencyFormat.format(cartTotal + shippingFee)}
+              Tổng thanh toán: {currencyFormat.format(cartTotal + shippingFee - cartDiscount)}
             </Typography>
 
             <Button variant="contained" onClick={() => handleCheckOut()}>

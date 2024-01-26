@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material";
 import React from "react";
-import { CallAndSaveZaloNumber, CallAndSaveZaloNumberPromise, saveZaloInfoToCache, userInfoState } from "../recoil-state/userInfo-state";
+import { CallAndSaveZaloNumberPromise, saveZaloInfoToCache, userInfoState } from "../recoil-state/userInfo-state";
 import welcomeImage from "../static/welcome-image.jpg";
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
@@ -13,7 +13,6 @@ export default function WelcomePage() {
 
     const understandHandle = () => {
 
-        CallAndSaveZaloNumber();
         CallAndSaveZaloNumberPromise().then((phoneZalo)=>{
             //console.log('data ne', phoneZalo)
             setUserInfoData({

@@ -8,7 +8,7 @@ import { Header } from "zmp-ui";
 import { folder_image_url, zaloChatUserId } from "../recoil-state/setting";
 import { getStorage, openChat } from "zmp-sdk";
 import { userInfoState } from "../recoil-state/userInfo-state";
-import DrawerPhoneAccess from "../components/drawerPhoneAcess";
+import DrawerPhoneAccess from "../components/drawerPhoneAccess";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
 import ChatIcon from '@mui/icons-material/Chat';

@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Button, Drawer, Typography } from "@mui/material";
-import { CallAndSaveZaloNumber, saveZaloInfoToCache, userInfoState } from "../recoil-state/userInfo-state";
-import { getStorage, getUserInfo } from "zmp-sdk";
+import { CallAndSaveZaloNumberPromise, saveZaloNumberToCache, userInfoState } from "../recoil-state/userInfo-state";
 import { useRecoilState } from "recoil";
 import logoImage from "../static/logo.png";
 
@@ -11,43 +10,17 @@ export default function DrawerPhoneAccess(props: any) {
 
     const handleOpenPhoneAccess = () => {
 
-        CallAndSaveZaloNumber();
+        CallAndSaveZaloNumberPromise().then((phoneZalo) => {
 
-        getStorage({
-            keys: ["zaloNumber"],
-            success: (data) => {
-                const { zaloNumber } = data;
-
-                setUserInfoData({
-                    ...userInfoData,
-                    phone: zaloNumber
-                })
-
-                //Đóng popup
-                props.setOpenDrawerAccessPhone(false);
-
-                //Mở product Picker
-                props.setOpenDrawer(true);
-            },
-            fail: (error) => {
-                console.log(error);
-            }
-        });
-
-        getUserInfo({
-            success: (data) => {
-                const { userInfo } = data;
-                setUserInfoData({
-                    ...userInfoData,
-                    id: userInfoData.id,
-                    name: userInfoData.name,
-                    avatar: userInfoData.avatar,
-                })
-                saveZaloInfoToCache(userInfo.id, userInfo.idByOA, userInfo.name, userInfo.avatar)
-            },
-            fail: (error) => {
-                console.log(error);
-            }
+            setUserInfoData({
+                ...userInfoData,
+                phone: phoneZalo,
+            });
+            saveZaloNumberToCache(phoneZalo);
+            
+            props.setOpenDrawerAccessPhone(false);
+            props.setZaloLogin(true);
+            props.setTab(props.tabRedirect);
         });
     };
 
