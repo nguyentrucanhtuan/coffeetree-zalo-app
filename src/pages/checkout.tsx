@@ -64,6 +64,9 @@ export default function CheckoutPage() {
 
   const userInfoData = useRecoilValue(userInfoState);
 
+  console.log('userInfoData', userInfoData);
+
+
   const { openSnackbar, closeSnackbar } = useSnackbar();
 
   const timmerId = React.useRef();
@@ -112,6 +115,7 @@ export default function CheckoutPage() {
         cart: JSON.stringify(cart),
         payment_id: paymentId,
         note: "ghi chú đơn hàng",
+        order_total: cartTotal + shippingFee - cartDiscount,
         zalo_userId : userInfoData.id,
         zalo_name: userInfoData.name,
         zalo_idByOA: userInfoData.idByOA,

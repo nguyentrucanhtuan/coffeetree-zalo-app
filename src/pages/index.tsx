@@ -84,10 +84,10 @@ const Index = () => {
             const { userInfo } = data;
             setUserInfoData({
               ...userInfoData,
-              id: userInfoData.id,
-              name: userInfoData.name,
-              avatar: userInfoData.avatar,
-              idByOA: userInfoData.idByOA
+              id: userInfo.id,
+              name: userInfo.name,
+              avatar: userInfo.avatar,
+              idByOA: userInfo.idByOA
             })
             //console.log('getUserInfo', userInfo);
             saveZaloInfoToCache(userInfo.id, userInfo.idByOA, userInfo.name, userInfo.avatar)
