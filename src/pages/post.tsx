@@ -1,7 +1,7 @@
 import React from "react";
 import { Header } from "zmp-ui";
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
-import { folder_image_url } from "../recoil-state/setting";
+import { folder_image_url, zaloChatUserId } from "../recoil-state/setting";
 import { useParams } from "react-router-dom";
 import { postPublicListState } from "../recoil-state/post-state";
 import { useRecoilValue } from "recoil";
@@ -13,8 +13,8 @@ const zaloOAId = "1610121007405920472";
 const openChatScreen = async () => {
   try {
     await openChat({
-      type: "oa",
-      id: zaloOAId,
+      type: "user",
+      id: zaloChatUserId,
       message: "Xin Chào, tôi muốn hỏi",
     });
   } catch (error) {

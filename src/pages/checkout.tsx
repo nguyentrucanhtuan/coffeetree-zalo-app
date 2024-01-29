@@ -34,15 +34,14 @@ import { freeshipMinimumState, settingListState, shippingFeeState } from "../rec
 export default function CheckoutPage() {
 
   const navigate = useNavigate();
-
   const [cartList, setCartList] = useRecoilState(cartState);
   const freeshipMinimum = useRecoilValue(freeshipMinimumState);
   const shippingPrice = useRecoilValue(shippingFeeState);
   const cartDiscount = useRecoilValue(cartDiscountState);
   const cartTotal = useRecoilValue(cartTotalState);
-  
+
   let shippingFee = 0;
-  if(cartTotal < parseInt(freeshipMinimum)){
+  if (cartTotal < parseInt(freeshipMinimum)) {
     shippingFee = parseInt(shippingPrice);
   }
 
@@ -66,11 +65,8 @@ export default function CheckoutPage() {
 
   console.log('userInfoData', userInfoData);
 
-
   const { openSnackbar, closeSnackbar } = useSnackbar();
-
   const timmerId = React.useRef();
-
   React.useEffect(
     () => () => {
       closeSnackbar();
@@ -116,7 +112,7 @@ export default function CheckoutPage() {
         payment_id: paymentId,
         note: "ghi chú đơn hàng",
         order_total: cartTotal + shippingFee - cartDiscount,
-        zalo_userId : userInfoData.id,
+        zalo_userId: userInfoData.id,
         zalo_name: userInfoData.name,
         zalo_idByOA: userInfoData.idByOA,
         zalo_avatar: userInfoData.avatar,
@@ -372,7 +368,7 @@ export default function CheckoutPage() {
     );
   else {
     return (
-      <Box>
+      <>
         <Box
           sx={{
             alignItems: "center",
@@ -389,10 +385,10 @@ export default function CheckoutPage() {
             Lướt CoffeeTree, lựa cà phê ngay đi!
           </Typography>
           {/* <Button variant="outlined" onClick={() => navigate("/")}>
-            Mua sắm ngay
-          </Button> */}
+          Mua sắm ngay
+        </Button> */}
         </Box>
-      </Box>
+      </>
     );
   }
 }

@@ -21,7 +21,7 @@ import { clearStorage, getAccessToken, getStorage, getUserID, getUserInfo } from
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfoState, saveZaloInfoToCache } from "../recoil-state/userInfo-state";
 import { cartTotalQuantityState } from "../recoil-state/cart-state";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TopBar from "../components/topBar";
 import DrawerPhoneAccess from "../components/drawerPhoneAccess";
 
@@ -125,10 +125,12 @@ const Index = () => {
 
   const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
+  const navigate = useNavigate();
   return (
     <>
       <TopBar />
       <Box>
+        {/* <Button sx={{ marginTop: "50px" }} onClick={() => navigate(`/checkout_success/139`)}> Test Link</Button> */}
         {/* <Button sx={{ marginTop: "50px" }} onClick={() => { clearData() }}>Clear Data</Button> */}
         <Box sx={{ marginBottom: "60px", marginTop: "48px" }}>
           {tab == "home" && <HomePage />}
@@ -174,7 +176,6 @@ const Index = () => {
       <DrawerPhoneAccess 
         open={openDrawerAccessPhone} 
         setOpenDrawerAccessPhone={setOpenDrawerAccessPhone} 
-        //setOpenDrawer={setOpenDrawer}
         setZaloLogin={setZaloLogin}
         setTab={setTab}
         tabRedirect={tabRedirect}

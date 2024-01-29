@@ -11,8 +11,8 @@ import { allProductListState, productById } from "../recoil-state/product-state"
 import { cartTotal } from "../recoil-state/cart-state";
 import { Header } from "zmp-ui";
 import { paymentMethodByIdState } from "../recoil-state/payment-state";
-
 import chatIcon from "../static/chat-icon.png";
+import checkOrderIcon from "../static/check-order-icon.png";
 import AppLoading from "../components/loading";
 
 const zaloOAId = "1610121007405920472";
@@ -44,7 +44,6 @@ export default function CheckoutSuccessPage() {
   };
 
   const linkOrderAPI = APILink + "/order";
-
   const [orderInfo, setOrderInfo] = React.useState([]);
   const [cartList, setCartList] = React.useState([]);
 
@@ -67,9 +66,7 @@ export default function CheckoutSuccessPage() {
   console.log('orderInfo', orderInfo);
 
   const productAllList = useRecoilValue(allProductListState);
-
   const cartTotalPrice = cartTotal(cartList);
-
   const paymentType = useRecoilValue(paymentMethodByIdState(orderInfo?.payment_id));
 
   return (
@@ -80,7 +77,27 @@ export default function CheckoutSuccessPage() {
         <AppLoading />
       ) : (
         <Box sx={{ backgroundColor: "#fff" }}>
-          <Paper elevation={2} sx={{ margin: "10px", marginTop: "50px", padding: "10px" }}>
+
+          <Box
+            sx={{
+              alignItems: "center",
+              flexDirection: "column",
+              display: "flex",
+              marginTop: "48px",
+              padding: "10px"
+            }}
+          >
+            <img
+              style={{ width: "80px" }}
+              src={checkOrderIcon}
+            />
+            <Typography variant="h6" fontWeight="Bold" color="#2e7d32">Đặt hàng thành công</Typography>
+            <Typography variant="body2">
+              Bạn sẽ nhận được tin nhắn từ Zalo OA CoffeeTree để xem chi tiết đơn hàng
+            </Typography>
+          </Box>
+          <Divider />
+          <Paper elevation={2} sx={{ margin: "10px", padding: "10px" }}>
             <Box
               sx={{
                 display: "flex",
@@ -216,7 +233,7 @@ export default function CheckoutSuccessPage() {
             >
               <Typography variant="body1">Khuyến Mãi: {orderInfo?.promotion_code}</Typography>
               <Typography variant="body1">
-                - {currencyFormat.format(orderInfo?.discount)}
+                {currencyFormat.format(orderInfo?.discount)}
               </Typography>
             </Box>
 
