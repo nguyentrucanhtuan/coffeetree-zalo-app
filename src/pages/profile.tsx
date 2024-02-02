@@ -1,4 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router";
+import { openChat, followOA } from "zmp-sdk/apis";
+import { useRecoilValue } from "recoil";
+
 import {
   Box,
   List,
@@ -17,16 +21,9 @@ import DraftsIcon from "@mui/icons-material/Drafts";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-
 import AddressList from "../components/addressList";
-
-import { useNavigate } from "react-router";
-import { openChat, followOA } from "zmp-sdk/apis";
-import { useRecoilValue } from "recoil";
 import { userInfoState } from "../recoil-state/userInfo-state";
-import { zaloChatUserId } from "../recoil-state/setting";
-
-const zaloOAId = "1610121007405920472";
+import { zaloChatUserId, zaloOAId } from "../recoil-state/setting";
 
 const openChatScreen = async () => {
   try {
@@ -53,14 +50,15 @@ const followZaloOA = async () => {
 };
 
 export default function ProfilePage() {
-  const [openDrawer, setOpenDrawer] = React.useState(false);
 
   const navigate = useNavigate();
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+  const userInfoData = useRecoilValue(userInfoState);
 
   function toggelDrawerAddress(newOpen: boolean) {
     setOpenDrawer(newOpen);
   }
-  const userInfoData = useRecoilValue(userInfoState);
+  
   return (
     <>
       <Box>
@@ -89,23 +87,10 @@ export default function ProfilePage() {
             </Box>
           </Box>
         </Paper>
-
         <Divider style={{ borderWidth: "4px" }} />
-
         <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
           <nav aria-label="main mailbox folders">
             <List>
-              {/* <ListItem disablePadding>
-                <ListItemButton onClick={() => navigate('/editInfo')}>
-                  <ListItemIcon>
-                    <ContactPhoneIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Chỉnh sửa thông tin"  />
-                  <NavigateNextIcon />
-                </ListItemButton>
-              </ListItem>
-              <Divider /> */}
-
               <ListItem disablePadding>
                 <ListItemButton onClick={() => navigate('/orderList')} >
                   <ListItemIcon>
@@ -116,9 +101,7 @@ export default function ProfilePage() {
                   <NavigateNextIcon />
                 </ListItemButton>
               </ListItem>
-
               <Divider />
-
               <ListItem disablePadding>
                 <ListItemButton onClick={() => toggelDrawerAddress(true)}>
                   <ListItemIcon>
@@ -131,7 +114,6 @@ export default function ProfilePage() {
                 </ListItemButton>
               </ListItem>
               <Divider />
-
               <ListItem disablePadding>
                 <ListItemButton onClick={() => openChatScreen()} >
                   <ListItemIcon>

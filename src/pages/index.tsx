@@ -107,7 +107,6 @@ const Index = () => {
         console.log(error);
       }
     });
-
   }, [zaloLogin]);
 
   const navigate = useNavigate();

@@ -1,48 +1,38 @@
 import React from "react";
 import { Box, Tabs, Tab } from "@mui/material";
+import { useParams } from "react-router";
+import { useLocation } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { Header } from "zmp-ui";
 
 import ProductList from "../components/productList";
-
-import { useRecoilValue } from "recoil";
 import { collectionPublicListState } from "../recoil-state/collection-state";
 import { productsByCollectionState } from "../recoil-state/product-state";
 
-import { useParams } from "react-router";
-import { useLocation } from "react-router-dom";
-import { Header } from "zmp-ui";
-
 export default function CollectionPage() {
+
   let { collectionId } = useParams();
 
   let id = 1;
-
   if (collectionId) {
     id = Number(collectionId);
   }
 
   const [curentCategoryId, setcurentCategoryId] = React.useState(id);
+  const collectionList = useRecoilValue(collectionPublicListState);
+  const productListByCollection = useRecoilValue(productsByCollectionState(curentCategoryId));
 
   const handleChange = (event: React.SyntheticEvent, value: number) => {
     setcurentCategoryId(value);
   };
 
-  const collectionList = useRecoilValue(collectionPublicListState);
-  
-  const productListByCollection = useRecoilValue(
-    productsByCollectionState(curentCategoryId),
-  );
-
-  const location = useLocation();
-
   let isHomepage = false;
   let marginTopValue = "43px";
-
+  const location = useLocation();
   if (location.pathname === "/" || location.pathname === "/index/checkout") {
     isHomepage = true;
     marginTopValue = "0px";
   }
-
-  console.log('location.pathname', location.pathname);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -56,7 +46,7 @@ export default function CollectionPage() {
           aria-label="scrollable auto tabs example"
           sx={{ marginTop: marginTopValue }}
         >
-          {collectionList.map((collection) => (
+          {collectionList.map((collection : any) => (
             <Tab
               key={collection.id}
               value={Number(collection.id)}

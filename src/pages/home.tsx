@@ -14,6 +14,7 @@ import { featureListState } from "../recoil-state/feature-state";
 import PostFeatureById from "../components/postFeatureById";
 
 const HomePage = () => {
+
   const collectionList = useRecoilValue(collectionPublicListState);
   const productList = useRecoilValue(productPublicListState);
   const bannerList = useRecoilValue(bannerListState);
