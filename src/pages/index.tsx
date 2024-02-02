@@ -1,43 +1,34 @@
 import React from "react";
-import { Badge, Box, styled } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { clearStorage, getAccessToken, getStorage, getUserInfo } from "zmp-sdk/apis";
 
 import {
   BottomNavigation,
   BottomNavigationAction,
   Paper,
-  Button,
+  Badge,
+  Box,
+  styled
 } from "@mui/material";
+
+import HomePage from "./home";
+import CollectionPage from "./collection";
+import CheckoutPage from "./checkout";
+import ProfilePage from "./profile";
+import TopBar from "../components/topBar";
+import DrawerPhoneAccess from "../components/drawerPhoneAccess";
+import { userInfoState, saveZaloInfoToCache } from "../recoil-state/userInfo-state";
+import { cartTotalQuantityState } from "../recoil-state/cart-state";
 
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import AppsIcon from "@mui/icons-material/Apps";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import HomeIcon from "@mui/icons-material/Home";
 
-import HomePage from "./home";
-import CollectionPage from "./collection";
-import CheckoutPage from "./checkout";
-import ProfilePage from "./profile";
-import { clearStorage, getAccessToken, getStorage, getUserID, getUserInfo } from "zmp-sdk/apis";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { userInfoState, saveZaloInfoToCache } from "../recoil-state/userInfo-state";
-import { cartTotalQuantityState } from "../recoil-state/cart-state";
-import { useNavigate, useParams } from "react-router-dom";
-import TopBar from "../components/topBar";
-import DrawerPhoneAccess from "../components/drawerPhoneAccess";
-
 const Index = () => {
 
-  const [openDrawerAccessPhone, setOpenDrawerAccessPhone] = React.useState(false);
   let { tabParam } = useParams();
-
-  const clearData = async () => {
-    try {
-      await clearStorage({});
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   let tabDefault = "home";
   if (tabParam != null) {
     tabDefault = tabParam;
@@ -45,68 +36,13 @@ const Index = () => {
 
   const [tab, setTab] = React.useState(tabDefault);
   const [tabRedirect, setTabRedirect] = React.useState();
+  const [openDrawerAccessPhone, setOpenDrawerAccessPhone] = React.useState(false);
   const [userInfoData, setUserInfoData] = useRecoilState(userInfoState);
-
   const [zaloLogin, setZaloLogin] = React.useState(false);
-
-  React.useEffect(() => {
-    
-    getStorage({
-      keys: ["zaloNumber"],
-      success: (data) => {
-        // xử lý khi gọi api thành công
-        const { zaloNumber } = data;
-
-        setUserInfoData({
-          ...userInfoData,
-          phone: zaloNumber
-        })
-        
-        if(zaloNumber != null && zaloNumber != ""){
-          setZaloLogin(true);
-        }
-        
-      },
-      fail: (error) => {
-        // xử lý khi gọi api thất bại
-        console.log(error);
-      }
-    });
-    
-    console.log('userInfoData.phone', userInfoData.phone);
-    console.log('zaloLogin', zaloLogin);
-
-    getAccessToken({
-      success: (accessToken) => {
-        // xử lý khi gọi api thành công
-        getUserInfo({
-          success: (data) => {
-            const { userInfo } = data;
-            setUserInfoData({
-              ...userInfoData,
-              id: userInfo.id,
-              name: userInfo.name,
-              avatar: userInfo.avatar,
-              idByOA: userInfo.idByOA
-            })
-            //console.log('getUserInfo', userInfo);
-            saveZaloInfoToCache(userInfo.id, userInfo.idByOA, userInfo.name, userInfo.avatar)
-          },
-          fail: (error) => {
-            console.log(error);
-          }
-        });
-      },
-      fail: (error) => {
-        // xử lý khi gọi api thất bại
-        console.log(error);
-      }
-    });
-
-  }, [zaloLogin]);
+  const cartQuantity = useRecoilValue(cartTotalQuantityState);
 
   const handleBottomNavigation = (event: any, newTab: any) => {
-    if((newTab == "checkout" || newTab == "profile") && zaloLogin == false) {
+    if ((newTab == "checkout" || newTab == "profile") && zaloLogin == false) {
       setTabRedirect(newTab);
       setOpenDrawerAccessPhone(true);
     } else {
@@ -123,9 +59,66 @@ const Index = () => {
     },
   }));
 
-  const cartQuantity = useRecoilValue(cartTotalQuantityState);
+  React.useEffect(() => {
+    getStorage({
+      keys: ["zaloNumber"],
+      success: (data) => {
+        // xử lý khi gọi api thành công
+        const { zaloNumber } = data;
+
+        setUserInfoData({
+          ...userInfoData,
+          phone: zaloNumber
+        })
+
+        if (zaloNumber != null && zaloNumber != "") {
+          setZaloLogin(true);
+        }
+
+      },
+      fail: (error) => {
+        // xử lý khi gọi api thất bại
+        console.log(error);
+      }
+    });
+
+    getAccessToken({
+      success: (accessToken) => {
+        // xử lý khi gọi api thành công
+        getUserInfo({
+          success: (data) => {
+            const { userInfo } = data;
+            setUserInfoData({
+              ...userInfoData,
+              id: userInfo.id,
+              name: userInfo.name,
+              avatar: userInfo.avatar,
+              idByOA: userInfo.idByOA as string
+            })
+            saveZaloInfoToCache(userInfo.id, userInfo.idByOA, userInfo.name, userInfo.avatar)
+          },
+          fail: (error) => {
+            console.log(error);
+          }
+        });
+      },
+      fail: (error) => {
+        // xử lý khi gọi api thất bại
+        console.log(error);
+      }
+    });
+
+  }, [zaloLogin]);
 
   const navigate = useNavigate();
+  const clearData = async () => {
+    try {
+      await clearStorage({});
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <TopBar />
@@ -173,16 +166,15 @@ const Index = () => {
         </Paper>
       </Box>
 
-      <DrawerPhoneAccess 
-        open={openDrawerAccessPhone} 
-        setOpenDrawerAccessPhone={setOpenDrawerAccessPhone} 
+      <DrawerPhoneAccess
+        open={openDrawerAccessPhone}
+        setOpenDrawerAccessPhone={setOpenDrawerAccessPhone}
         setZaloLogin={setZaloLogin}
         setTab={setTab}
         tabRedirect={tabRedirect}
       />
     </>
   );
-
 };
 
 export default Index;

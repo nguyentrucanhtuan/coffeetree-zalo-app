@@ -15,7 +15,6 @@ import {
 
 import DraftsIcon from "@mui/icons-material/Drafts";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
@@ -52,8 +51,6 @@ const followZaloOA = async () => {
     console.log(error);
   }
 };
-
-
 
 export default function ProfilePage() {
   const [openDrawer, setOpenDrawer] = React.useState(false);

@@ -19,7 +19,7 @@ import { cartDiscountState, cartState, cartTotalState } from "../recoil-state/ca
 import { useNavigate } from "react-router";
 import { addressSelectState } from "../recoil-state/address-state";
 import { paymentMethodListState } from "../recoil-state/payment-state";
-import { folder_image_url, APILink } from "../recoil-state/setting";
+import { folder_image_url, APILink, zaloOAId } from "../recoil-state/setting";
 import { userInfoState } from "../recoil-state/userInfo-state";
 import { useSnackbar } from "zmp-ui";
 import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
@@ -30,9 +30,20 @@ import { voucherSelectState } from "../recoil-state/voucher-state";
 
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import { freeshipMinimumState, settingListState, shippingFeeState } from "../recoil-state/setting-state";
+import { followOA } from "zmp-sdk";
 
 export default function CheckoutPage() {
 
+  followOA({
+    id: zaloOAId,
+    success: () => {
+      console.log('Follow OA')
+    },
+    fail: (err) => {
+      console.log(err)
+    }
+  });
+  
   const navigate = useNavigate();
   const [cartList, setCartList] = useRecoilState(cartState);
   const freeshipMinimum = useRecoilValue(freeshipMinimumState);
